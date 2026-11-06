@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>Лаунж-бар</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root { font-family: system-ui, sans-serif; color: #242424; background: #f5f5f3; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 16px; max-width: 760px; margin-inline: auto; }
+    header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    h1 { font-size: 1.35rem; margin: 8px 0; }
+    h2 { font-size: 1.15rem; }
+    nav { display: flex; gap: 6px; overflow-x: auto; padding: 12px 0; }
+    button, input, select, textarea { font: inherit; padding: 9px 11px; border: 1px solid #bbb; border-radius: 6px; background: white; }
+    button { cursor: pointer; white-space: nowrap; }
+    button.active, button.primary { color: white; background: #315a4b; border-color: #315a4b; }
+    button.danger { color: #8a2626; }
+    .row { display: flex; gap: 10px; align-items: center; justify-content: space-between; }
+    .item { border-top: 1px solid #ddd; padding: 13px 0; }
+    .item p { margin: 5px 0; color: #666; }
+    .item h3 { margin: 0; font-size: 1rem; }
+    .muted { color: #666; }
+    .stack { display: grid; gap: 10px; }
+    label { display: grid; gap: 5px; }
+    input, select, textarea { width: 100%; }
+    textarea { min-height: 90px; }
+    .notice { padding: 11px; background: #e8eee9; border-radius: 6px; margin: 10px 0; }
+    .error { background: #f6e5e2; }
+    .badge { font-size: .82rem; padding: 3px 7px; background: #e9e9e5; border-radius: 4px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 7px; }
+    .total { font-weight: 700; }
+    #toast { position: sticky; top: 0; z-index: 1; }
+    @media (max-width: 420px) { body { padding: 12px; } nav button { padding: 8px; } }
+  </style>
+</head>
+<body>
+  <header><h1>Лаунж-бар</h1><span id="user-label" class="muted"></span></header>
+  <nav id="nav"></nav>
+  <div id="toast" aria-live="polite"></div>
+  <main id="app"><p>Загрузка…</p></main>
+<script>
+(() => {
+  const tg = window.Telegram?.WebApp;
+  tg?.ready();
+  tg?.expand();
+  const initData = tg?.initData || '';
+  const devMode = new URLSearchParams(location.search).get('demo') === '1';
+  const devId = new URLSearchParams(location.search).get('id') || '111111';
+  const state = { user: null, menu: [], tables: [], bookings: [], offers: [], cart: {}, section: 'menu', adminTab: 'bookings' };
+  const app = document.querySelector('#app');
+  const nav = document.querySelector('#nav');
+  let toastTimer;
+  const esc = (value) => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const money = (value) => `${Number(value).toLocaleString('ru-RU')} ₽`;
+  const toast = (message, error = false) => {
+    const el = document.querySelector('#toast');
+    el.innerHTML = `<div class="notice ${error ? 'error' : ''}">${esc(message)}</div>`;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { el.innerHTML = ''; }, 4500);
+  };
+  async function api(path, options = {}) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (initData) headers['X-Telegram-Init-Data'] = initData;
+    else if (devMode) headers['X-Dev-Telegram-Id'] = devId;
+    const response = await fetch(path, { ...options, headers: { ...headers, ...options.headers } });
+    if (!response.ok) {
+      let message = `Ошибка ${response.status}`;
+      try { const data = await response.json(); message = data.detail || message; } catch (_) {}
+      throw new Error(message);
+    }
+    return response.status === 204 ? null : response.json();
+  }
+  const navItems = [
+    ['menu', 'Меню'], ['offers', 'Акции'], ['booking', 'Бронь'], ['cart', `Корзина (${Object.values(state.cart).reduce((a,b)=>a+b,0)})`], ['reviews', 'Отзывы']
+  ];
+  function renderNav() {
+    const items = [...navItems];
+    if (state.user?.role === 'admin') items.push(['admin', 'Админ']);
+    nav.innerHTML = items.map(([id, title]) => `<button data-nav="${id}" class="${state.section === id ? 'active' : ''}">${title}</button>`).join('');
+  }
+  function renderMenu() {
+    const categories = [...new Set(state.menu.map(item => item.category))];
+    return categories.map(category => `<h2>${esc(category)}</h2>` + state.menu.filter(item => item.category === category).map(item => `
+      <article class="item row"><div><h3>${esc(item.title)}</h3><p>${esc(item.description)}</p><strong>${money(item.price)}</strong></div>
+      <button data-add="${item.id}" aria-label="Добавить ${esc(item.title)}">Добавить</button></article>`).join('')).join('') || '<p>Меню пока пусто.</p>';
+  }
+  function renderCart() {
+    const entries = Object.entries(state.cart).filter(([, quantity]) => quantity > 0);
+    if (!entries.length) return '<p>Корзина пока пуста. Добавьте позиции из меню.</p>';
+    const total = entries.reduce((sum, [id, quantity]) => sum + state.menu.find(item => item.id === Number(id)).price * quantity, 0);
+    return `<div>${entries.map(([id, quantity]) => { const item = state.menu.find(row => row.id === Number(id)); return `<article class="item row"><div><strong>${esc(item.title)}</strong><p>${money(item.price)} за шт.</p></div><div class="actions"><button data-quantity="${id}" data-delta="-1" aria-label="Уменьшить">−</button><span>${quantity}</span><button data-quantity="${id}" data-delta="1" aria-label="Увеличить">+</button></div></article>`; }).join('')}</div>
+      <p class="total">Итого: ${money(total)}</p>
+      <form id="order-form" class="stack">
+        <label>Тип заказа<select name="delivery_type" id="delivery-type"><option value="dine_in">В заведении / предзаказ</option><option value="delivery">Доставка</option></select></label>
+        <label id="address-field" hidden>Адрес доставки<input name="address" maxlength="500" placeholder="Улица, дом, квартира"></label>
+        <label id="booking-field">Привязать к брони<select name="booking_id"><option value="">Без привязки</option>${state.bookings.filter(b => b.status !== 'cancelled').map(b => `<option value="${b.id}">Стол №${b.table_number}, ${esc(b.booking_date)} ${esc(b.start_time)}</option>`).join('')}</select></label>
+        <button class="primary" type="submit">Оформить заказ</button>
+      </form>`;
+  }
+  function renderBooking() {
+    const today = new Date().toLocaleDateString('sv-SE');
+    return `<form id="booking-form" class="stack">
+      <label>Дата<input type="date" name="booking_date" min="${today}" value="${today}" required></label>
+      <div class="row"><label>Начало<input type="time" name="start_time" value="18:00" required></label><label>Окончание<input type="time" name="end_time" value="20:00" required></label></div>
+      <label>Столик<select name="table_id" required>${state.tables.map(table => `<option value="${table.id}">Стол №${table.table_number} · ${table.seats_count} мест</option>`).join('')}</select></label>
+      <button class="primary" type="submit">Проверить и забронировать</button></form>
+      <h2>Мои брони</h2>${state.bookings.map(b => `<article class="item"><div class="row"><strong>Стол №${b.table_number}</strong><span class="badge">${esc(b.status)}</span></div><p>${esc(b.booking_date)} · ${esc(b.start_time)}–${esc(b.end_time)}</p></article>`).join('') || '<p class="muted">Броней пока нет.</p>'}`;
+  }
+  function renderAdmin() {
+    return `<div class="actions"><button data-admin-tab="bookings" class="${state.adminTab === 'bookings' ? 'active' : ''}">Брони</button><button data-admin-tab="orders" class="${state.adminTab === 'orders' ? 'active' : ''}">Заказы</button><button data-admin-tab="menu" class="${state.adminTab === 'menu' ? 'active' : ''}">Меню</button></div><section id="admin-content"><p>Загрузка…</p></section>`;
+  }
+  function render() {
+    renderNav();
+    const views = {
+      menu: `<h2>Меню</h2>${renderMenu()}`,
+      offers: `<h2>Акции и предложения</h2>${state.offers.map(offer => `<article class="item"><h3>${esc(offer.title)}</h3><p>${esc(offer.description)}</p></article>`).join('')}`,
+      booking: `<h2>Бронирование столика</h2>${renderBooking()}`,
+      cart: `<h2>Корзина и заказ</h2>${renderCart()}`,
+      reviews: `<h2>Оставить отзыв</h2><form id="review-form" class="stack"><label>Оценка<select name="rating"><option value="5">5 — отлично</option><option value="4">4 — хорошо</option><option value="3">3 — нормально</option><option value="2">2 — плохо</option><option value="1">1 — очень плохо</option></select></label><label>Ваш отзыв<textarea name="text" minlength="3" maxlength="2000" required></textarea></label><button class="primary">Отправить отзыв</button></form>`,
+      admin: renderAdmin()
+    };
+    app.innerHTML = views[state.section] || views.menu;
+    if (state.section === 'admin') loadAdmin();
+  }
+  async function refreshBookings() { state.bookings = await api('/api/bookings/mine'); }
+  function readForm(form) { return Object.fromEntries(new FormData(form).entries()); }
+  async function loadAdmin() {
+    const target = document.querySelector('#admin-content');
+    try {
+      if (state.adminTab === 'bookings') {
+        const filter = new URLSearchParams();
+        const dateValue = document.querySelector('#admin-date')?.value;
+        const statusValue = document.querySelector('#admin-status')?.value;
+        if (dateValue) filter.set('booking_date', dateValue);
+        if (statusValue) filter.set('status_filter', statusValue);
+        const rows = await api(`/api/admin/bookings?${filter}`);
+        target.innerHTML = `<div class="row"><label>Дата <input id="admin-date" type="date"></label><label>Статус <select id="admin-status"><option value="">Все</option><option>pending</option><option>confirmed</option><option>cancelled</option></select></label></div>${rows.map(b => `<article class="item"><div class="row"><strong>Стол №${b.table_number} · ${esc(b.booking_date)} ${esc(b.start_time)}–${esc(b.end_time)}</strong><span class="badge">${esc(b.status)}</span></div><p>${esc(b.user_name)} ${b.username ? `(@${esc(b.username)})` : ''}</p><div class="actions">${b.status === 'pending' ? `<button data-booking-status="confirmed" data-id="${b.id}">Подтвердить</button>` : ''}${b.status !== 'cancelled' ? `<button class="danger" data-booking-status="cancelled" data-id="${b.id}">Отменить</button>` : ''}</div></article>`).join('') || '<p>Бронирований нет.</p>'}`;
+        target.querySelector('#admin-date').value = dateValue || '';
+        target.querySelector('#admin-status').value = statusValue || '';
+        target.querySelectorAll('input,select').forEach(el => el.addEventListener('change', loadAdmin));
+      } else if (state.adminTab === 'orders') {
+        const rows = await api('/api/admin/orders');
+        target.innerHTML = rows.map(order => `<article class="item"><div class="row"><strong>Заказ №${order.id}</strong><span class="badge">${esc(order.status)}</span></div><p>${esc(order.user_name)} · ${order.delivery_type === 'delivery' ? `Доставка: ${esc(order.address)}` : order.booking ? `Стол №${order.booking.table_number}, ${esc(order.booking.booking_date)} ${esc(order.booking.start_time)}` : 'В заведении без брони'}</p><p>${order.items.map(line => `${esc(line.title)} × ${line.quantity}`).join(', ')}</p><strong>${money(order.total_price)}</strong></article>`).join('') || '<p>Заказов пока нет.</p>';
+      } else {
+        target.innerHTML = `<form id="menu-add-form" class="stack"><label>Название<input name="title" required maxlength="160"></label><label>Категория<input name="category" required maxlength="80" placeholder="Напитки"></label><label>Цена<input name="price" type="number" min="0.01" step="0.01" required></label><label>Описание<input name="description" maxlength="2000"></label><button class="primary">Добавить позицию</button></form><h3>Текущие позиции</h3>${state.menu.map(item => `<article class="item row"><div><strong>${esc(item.title)}</strong><p>${esc(item.category)} · ${money(item.price)}</p></div><button class="danger" data-delete-menu="${item.id}">Удалить</button></article>`).join('')}`;
+      }
+    } catch (error) { target.innerHTML = `<div class="notice error">${esc(error.message)}</div>`; }
+  }
+
+  nav.addEventListener('click', event => {
+    const button = event.target.closest('[data-nav]');
+    if (!button) return;
+    state.section = button.dataset.nav;
+    render();
+  });
+  app.addEventListener('click', async event => {
+    const add = event.target.closest('[data-add]');
+    const quantity = event.target.closest('[data-quantity]');
+    const adminTab = event.target.closest('[data-admin-tab]');
+    const bookingStatus = event.target.closest('[data-booking-status]');
+    const deleteItem = event.target.closest('[data-delete-menu]');
+    try {
+      if (add) { state.cart[add.dataset.add] = (state.cart[add.dataset.add] || 0) + 1; render(); }
+      if (quantity) { const id = quantity.dataset.quantity; state.cart[id] = Math.max(0, (state.cart[id] || 0) + Number(quantity.dataset.delta)); render(); }
+      if (adminTab) { state.adminTab = adminTab.dataset.adminTab; render(); }
+      if (bookingStatus) { await api(`/api/admin/bookings/${bookingStatus.dataset.id}`, {method:'PATCH', body:JSON.stringify({status:bookingStatus.dataset.bookingStatus})}); toast('Статус брони обновлён'); await loadAdmin(); }
+      if (deleteItem) { await api(`/api/admin/menu/${deleteItem.dataset.deleteMenu}`, {method:'DELETE'}); await loadData(); toast('Позиция удалена'); render(); }
+    } catch (error) { toast(error.message, true); }
+  });
+  app.addEventListener('change', event => {
+    if (event.target.id === 'delivery-type') {
+      const delivery = event.target.value === 'delivery';
+      document.querySelector('#address-field').hidden = !delivery;
+      document.querySelector('#booking-field').hidden = delivery;
+    }
+  });
+  app.addEventListener('submit', async event => {
+    event.preventDefault();
+    try {
+      const form = event.target;
+      const values = readForm(form);
+      if (form.id === 'booking-form') {
+        const result = await api('/api/bookings', {method:'POST', body:JSON.stringify({...values, table_id:Number(values.table_id)})});
+        toast(result.message); await refreshBookings(); render();
+      } else if (form.id === 'order-form') {
+        const lines = Object.entries(state.cart).filter(([, quantity]) => quantity > 0).map(([menu_item_id, quantity]) => ({menu_item_id:Number(menu_item_id), quantity}));
+        const result = await api('/api/orders', {method:'POST', body:JSON.stringify({delivery_type:values.delivery_type, address:values.address || null, booking_id:values.booking_id ? Number(values.booking_id) : null, items:lines})});
+        state.cart = {}; toast(`Заказ №${result.id} принят на сумму ${money(result.total_price)}`); render();
+      } else if (form.id === 'review-form') {
+        await api('/api/reviews', {method:'POST', body:JSON.stringify({rating:Number(values.rating), text:values.text})});
+        form.reset(); toast('Спасибо за отзыв!');
+      } else if (form.id === 'menu-add-form') {
+        await api('/api/admin/menu', {method:'POST', body:JSON.stringify({...values, price:Number(values.price)})});
+        await loadData(); toast('Позиция добавлена'); render();
+      }
+    } catch (error) { toast(error.message, true); }
+  });
+  async function loadData() {
+    [state.menu, state.tables, state.offers] = await Promise.all([api('/api/menu'), api('/api/tables'), api('/api/offers')]);
+    await refreshBookings();
+  }
+  async function boot() {
+    try {
+      if (!initData && !devMode) {
+        app.innerHTML = '<div class="notice error">Откройте приложение через Telegram. Для локального теста добавьте <code>?demo=1</code> (сервер должен быть запущен с DEV_MODE=true).</div>';
+        return;
+      }
+      state.user = await api('/api/me');
+      document.querySelector('#user-label').textContent = state.user.role === 'admin' ? 'Администратор' : state.user.name;
+      await loadData(); render();
+    } catch (error) { app.innerHTML = `<div class="notice error">${esc(error.message)}</div>`; }
+  }
+  boot();
+})();
+</script>
+</body>
+</html>
