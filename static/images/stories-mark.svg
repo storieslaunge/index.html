@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Stories since 2018">
+  <circle cx="256" cy="256" r="254" fill="none"/>
+  <circle cx="256" cy="256" r="237" fill="none" stroke="#111" stroke-width="5"/>
+  <g fill="none" stroke="#090909" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="5" d="M224 117h64v9h-64zM228 126c15 3 28 9 37 19m19-19c-15 3-28 9-37 19"/>
+    <path stroke-width="5" d="M256 145c-27 4-40 28-23 45l39 39c19 19 6 43-16 46-23 3-42-17-35-37 4-12 17-22 35-30l25-11c18-8 26-23 17-35-8-11-24-11-34-1l-46 46c-20 20-12 43 7 55l36 23c22 15 19 39-2 49-20 10-42-3-45-24-2-15 9-28 25-38l43-27c23-15 29-34 16-49-12-13-31-12-43 0l-43 43c-28 28-21 62 8 82l33 23c29 20 24 48-1 60-27 13-57-4-57-31 0-19 13-34 34-48l53-36c25-17 36-39 24-58-11-18-35-20-52-5l-43 39c-34 30-28 67 7 91l33 23c29 20 42 46 32 70-12 29-43 41-74 31-25-8-39-29-39-53"/>
+    <path stroke-width="5" d="M202 177c18 32 42 48 73 60 39 15 58 37 58 65 0 27-16 47-42 64m55-173c20 17 34 43 37 71 7 67-47 117-129 117h-36"/>
+    <path stroke-width="4" d="M192 350l-1 13 27 1"/>
+  </g>
+  <text x="256" y="389" fill="#080808" font-family="Georgia,'Times New Roman',serif" font-size="58" font-weight="700" text-anchor="middle" letter-spacing="1">STORIES</text>
+  <text x="256" y="426" fill="#080808" font-family="Georgia,'Times New Roman',serif" font-size="27" font-weight="700" text-anchor="middle" letter-spacing="1">since 2018</text>
+</svg>

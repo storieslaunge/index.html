@@ -1,0 +1,1091 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071518">
+  <meta name="description" content="Stories Lounge Bar · since 2018">
+  <title>Stories · Lounge Bar</title>
+  <link rel="preload" as="image" href="/logo.png" fetchpriority="high">
+  <link rel="preload" as="image" href="/static/images/stories-logo-transparent.png">
+  <link rel="preload" as="image" href="/pictures/stories_kamiqr/menuOrgAttrsBackgrounds/c3a3c22ddd8844b3a39750cc4c55744a.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="/pictures/stories_kamiqr/menuSlides/2bfd3e81064649cf9b801445939b5988.webp">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f4f3ef;
+      --muted: #9ba8a7;
+      --dim: #708080;
+      --line: rgba(198, 218, 215, .1);
+      --panel: #192528;
+      --panel-raised: #202d30;
+      --deep: #10191b;
+      --page-solid: #080d0f;
+      --page-gradient: linear-gradient(180deg, #10282b 0, #0d1b1e 210px, #0a1012 560px, #080d0f 100%);
+      --topbar-bg: linear-gradient(180deg, rgba(13, 35, 38, .98), rgba(13, 35, 38, .9));
+      --card: #1b2426;
+      --field-bg: #121d20;
+      --nav-bg: rgba(11, 18, 20, .97);
+      --heading: #f4f2ec;
+      --subtle: #98a4a1;
+      --outline: #354447;
+      --warm-panel: #242922;
+      --green: #00c853;
+      --green-dark: #009e43;
+      --action-bg: #00c853;
+      --action-hover: #20dd70;
+      --action-ink: #062013;
+      --booking-bg: linear-gradient(145deg, #34352d, #202a28);
+      --booking-border: #d3b46e7d;
+      --booking-ink: #f4f2e9;
+      --quantity-bg: #174a30;
+      --quantity-ink: #fff;
+      --quantity-button: #00bd50;
+      --quantity-button-ink: #062013;
+      --gold: #d3b46e;
+      --theme-wave-x: 50vw;
+      --theme-wave-y: 50vh;
+      --theme-wave-radius: 100vmax;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Manrope', sans-serif;
+      font-family: var(--sans);
+      color: var(--ink);
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --ink: #302d29;
+      --muted: #746e65;
+      --dim: #827b71;
+      --line: rgba(67, 59, 49, .13);
+      --panel: #e9e5dd;
+      --panel-raised: #ded8ce;
+      --deep: #e3ded5;
+      --page-solid: #e7e2d9;
+      --page-gradient: linear-gradient(180deg, #d9d3c9 0, #e8e4dc 260px, #efede7 100%);
+      --topbar-bg: rgba(232, 227, 218, .94);
+      --card: #f3f0e9;
+      --field-bg: #e9e5dc;
+      --nav-bg: rgba(235, 231, 223, .97);
+      --heading: #302d29;
+      --subtle: #6f695f;
+      --outline: #c9c1b5;
+      --warm-panel: #e9e3d8;
+      --gold: #8d7041;
+      --action-bg: #81786a;
+      --action-hover: #6d6458;
+      --action-ink: #fffdf8;
+      --booking-bg: linear-gradient(145deg, #eee9df, #dfd8cc);
+      --booking-border: #c9bead;
+      --booking-ink: #38342e;
+      --quantity-bg: #e1dcd2;
+      --quantity-ink: #302d29;
+      --quantity-button: #81786a;
+      --quantity-button-ink: #fffdf8;
+    }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; transition: color .28s ease; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: var(--page-gradient);
+      background-attachment: fixed;
+      transition: background .28s ease, color .28s ease;
+    }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    a { transition: color .18s ease, opacity .18s ease; }
+    input, select, textarea { transition: border-color .18s ease, background-color .18s ease, box-shadow .18s ease; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+    .app-shell { width: min(100%, 520px); min-height: 100vh; margin: 0 auto; position: relative; overflow: clip; }
+    .topbar { position: sticky; top: 0; z-index: 5; min-height: 72px; padding: max(13px, env(safe-area-inset-top)) 18px 11px; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--topbar-bg); border-bottom: 1px solid var(--line); backdrop-filter: blur(18px); transition: background .28s ease, border-color .28s ease; }
+    .brand { display: flex; align-items: center; gap: 7px; min-width: 0; color: var(--ink); text-decoration: none; }
+    .brand-mark { width: 48px; height: 48px; flex: 0 0 auto; border-radius: 50%; object-fit: contain; }
+    .brand-name { min-width: 0; display: grid; gap: 1px; color: var(--heading); line-height: 1; }
+    .brand-name strong { font: 600 21px/.95 var(--serif); }
+    .brand-name small { color: var(--muted); font-size: 8px; font-weight: 700; }
+    .brand-since { display: none; }
+    .home-intro { padding: 5px 2px 3px; }
+    .home-intro h1 { margin: 8px 0 5px; color: var(--heading); font: 600 30px/1.05 var(--serif); }
+    .home-intro p { max-width: 320px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .quick-heading { margin: 25px 2px 11px; }
+    .home-menu { margin-top: 5px; }
+    .contact-section { margin: 30px 0 4px; padding-top: 3px; }
+    .contact-layout { display: grid; gap: 14px; }
+    .contact-details { display: grid; }
+    .contact-row { min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 2px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+    .contact-row:last-child { border-bottom: 0; }
+    .contact-row:focus-visible { outline: 2px solid var(--action-bg); outline-offset: -2px; }
+    .contact-copy { min-width: 0; display: grid; gap: 4px; }
+    .contact-copy small { color: var(--muted); font-size: 9px; font-weight: 700; }
+    .contact-copy strong { color: var(--heading); font-size: 12px; font-weight: 700; }
+    .contact-row svg { width: 17px; height: 17px; flex: 0 0 auto; color: var(--muted); }
+    .contact-map { overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); box-shadow: 0 8px 24px rgba(0, 0, 0, .1); }
+    .contact-map-preview { position: relative; height: 188px; display: block; overflow: hidden; background: repeating-linear-gradient(0deg, #d8d6cd 0 1px, transparent 1px 28px), repeating-linear-gradient(90deg, #d8d6cd 0 1px, transparent 1px 34px), #ebe9e1; }
+    .contact-map-preview::before, .contact-map-preview::after { content: ''; position: absolute; z-index: 0; background: #f7f5ee; box-shadow: 0 0 0 1px #c9c6bc; }
+    .contact-map-preview::before { width: 120%; height: 15px; top: 43%; left: -8%; transform: rotate(-12deg); }
+    .contact-map-preview::after { width: 15px; height: 120%; top: -8%; left: 67%; transform: rotate(17deg); }
+    .contact-map-pin { position: absolute; z-index: 1; width: 30px; height: 30px; display: grid; place-items: center; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 50% 50% 50% 4px; background: #b54835; color: #fff; box-shadow: 0 3px 11px #241b1860; rotate: -45deg; }
+    .contact-map-pin svg { width: 16px; height: 16px; rotate: 45deg; }
+    .contact-map-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 12px; }
+    .contact-map-footer small { color: var(--muted); font-size: 9px; }
+    .contact-map-link { display: inline-flex; align-items: center; gap: 6px; color: var(--heading); font-size: 10px; font-weight: 800; text-decoration: none; white-space: nowrap; }
+    .contact-map-link svg { width: 14px; height: 14px; }
+    .menu-catalog-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 1px 2px 16px; }
+    .catalog-total { color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .header-controls { flex: 0 0 auto; display: flex; align-items: center; gap: 5px; }
+    .language-switch { display: flex; align-items: center; padding: 3px; border: 1px solid var(--line); border-radius: 10px; background: var(--field-bg); transition: background .28s ease, border-color .28s ease; }
+    .language-switch button { min-width: 31px; min-height: 29px; padding: 0 6px; border: 0; border-radius: 7px; background: transparent; color: var(--muted); font-size: 10px; font-weight: 800; transition: background .2s ease, color .2s ease, transform .2s ease; }
+    .language-switch button.active { background: var(--panel-raised); color: var(--ink); box-shadow: 0 1px 5px #0001; }
+    .language-switch button:active, .theme-toggle:active { transform: scale(.94); }
+    .theme-toggle { width: 37px; min-height: 37px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--field-bg); color: var(--ink); transition: background .28s ease, color .28s ease, border-color .28s ease, transform .2s ease; }
+    .theme-toggle svg { width: 17px; height: 17px; flex: 0 0 auto; }
+    .theme-toggle span { display: none; font-size: 10px; font-weight: 700; }
+    #user-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+    #toast { position: fixed; z-index: 20; top: max(88px, calc(env(safe-area-inset-top) + 78px)); left: 50%; width: min(calc(100% - 32px), 480px); transform: translateX(-50%); pointer-events: none; }
+    ::view-transition-old(root) { animation: none; z-index: 1; }
+    ::view-transition-new(root) { animation: none; clip-path: circle(0 at var(--theme-wave-x) var(--theme-wave-y)); animation: theme-reveal .72s cubic-bezier(.16, 1, .3, 1) both; z-index: 2; }
+    @keyframes theme-reveal { to { clip-path: circle(var(--theme-wave-radius) at var(--theme-wave-x) var(--theme-wave-y)); } }
+    .notice { margin: 0 0 8px; padding: 12px 14px; border: 1px solid rgba(0, 200, 83, .24); border-radius: 12px; background: #153122; color: #d7ffe5; font-size: 13px; box-shadow: 0 10px 34px #0008; }
+    .notice.error { background: #3b2022; border-color: #783b3e; color: #ffe4e4; }
+    main { padding: 20px 19px calc(118px + env(safe-area-inset-bottom)); animation: appear .32s ease both; }
+    @keyframes appear { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+    .eyebrow { color: #90aaa6; font-size: 10px; font-weight: 800; letter-spacing: 1.7px; text-transform: uppercase; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin: 27px 2px 13px; }
+    .section-heading h2, .page-title { margin: 0; font-size: 19px; line-height: 1.25; font-weight: 700; letter-spacing: 0; }
+    .section-heading a, .text-button { color: #a8c0bb; font-size: 12px; text-decoration: none; }
+    .search-box { display: flex; gap: 11px; align-items: center; min-height: 48px; margin: 4px 0 22px; padding: 0 14px; border: 1px solid var(--line); border-radius: 14px; background: rgba(21, 33, 36, .92); color: #94a4a3; }
+    .search-box svg { width: 18px; height: 18px; flex: 0 0 auto; }
+    .search-box input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; padding: 0; color: var(--ink); font-size: 13px; }
+    .search-box input::placeholder { color: #81908f; }
+    .quick-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
+    .quick-action { min-width: 0; min-height: 87px; padding: 12px 5px 9px; display: grid; justify-items: center; align-content: center; gap: 8px; border: 1px solid var(--line); border-radius: 13px; background: linear-gradient(145deg, #1d2b2e, #162326); color: #c4cfcc; transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+    .quick-action:hover, .quick-action:active { transform: translateY(-2px); border-color: rgba(0, 200, 83, .42); background: #213332; }
+    .quick-action svg { width: 21px; height: 21px; color: #b9c9c4; }
+    .quick-action span { max-width: 76px; color: #b3bfbc; font-size: 9px; line-height: 1.25; font-weight: 800; text-align: center; }
+    .hero-banner { min-height: 224px; position: relative; overflow: hidden; display: flex; align-items: end; margin-top: 22px; padding: 22px; border: 1px solid rgba(231, 228, 213, .13); border-radius: 18px; background: #253332 url('https://images.pexels.com/photos/7518748/pexels-photo-7518748.jpeg?auto=compress&cs=tinysrgb&w=1100') center 53%/cover; box-shadow: 0 16px 38px #0005; }
+    .hero-banner::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(7, 13, 13, .86), rgba(7, 13, 13, .34) 64%, rgba(7, 13, 13, .06)), linear-gradient(0deg, rgba(5, 10, 10, .45), transparent 68%); }
+    .hero-copy { position: relative; z-index: 1; max-width: 290px; }
+    .hero-copy h1 { margin: 8px 0 4px; font: 600 31px/1.05 var(--serif); letter-spacing: 0; }
+    .hero-copy p { margin: 0; color: #e3e3dc; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+    .hero-dots { position: absolute; z-index: 1; right: 20px; bottom: 17px; display: flex; gap: 5px; }
+    .hero-dots i { width: 5px; height: 5px; display: block; border-radius: 50%; background: #ffffff70; }
+    .hero-dots i:first-child { width: 16px; border-radius: 5px; background: #f4f1e8; }
+    .horizontal-dishes { display: grid; grid-auto-columns: 134px; grid-auto-flow: column; gap: 11px; overflow-x: auto; margin: 0 -19px; padding: 0 19px 9px; scrollbar-width: none; }
+    .horizontal-dishes::-webkit-scrollbar, .category-strip::-webkit-scrollbar, .venue-tabs::-webkit-scrollbar { display: none; }
+    .dish-tile { overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); cursor: pointer; transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+    .dish-tile:hover { transform: translateY(-3px); border-color: #b7a16d66; box-shadow: 0 12px 24px #0002; }
+    .dish-tile img { width: 100%; aspect-ratio: 1.18; display: block; object-fit: cover; }
+    .dish-tile-copy { padding: 9px 10px 11px; }
+    .dish-tile h3 { min-height: 32px; margin: 0 0 5px; overflow: hidden; color: #f2f1ec; font-size: 11px; line-height: 1.4; font-weight: 800; }
+    .dish-tile strong { color: #f4f2e9; font-size: 13px; }
+    .page-top { margin: 2px 1px 18px; }
+    .page-top .eyebrow { display: block; margin-bottom: 7px; }
+    .page-title { font-size: 22px; }
+    .venue-tabs { display: flex; gap: 7px; overflow-x: auto; margin: 0 -19px 18px; padding: 0 19px 9px; scrollbar-width: none; border-bottom: 1px solid var(--line); }
+    .venue-tab { flex: 0 0 auto; padding: 9px 12px; border: 1px solid transparent; border-radius: 10px; background: transparent; color: #91a09f; font-size: 11px; font-weight: 700; }
+    .venue-tab.active { border-color: rgba(169, 197, 190, .12); background: #344447; color: #f4f3ef; }
+    .category-strip { display: flex; gap: 8px; overflow-x: auto; margin: 0 -19px 17px; padding: 0 19px 8px; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; scroll-snap-type: x proximity; }
+    .category-chip { flex: 0 0 auto; padding: 8px 12px; border: 1px solid #526261; border-radius: 999px; background: rgba(23, 35, 37, .88); color: #a8b5b1; font-size: 9px; font-weight: 800; letter-spacing: .35px; scroll-snap-align: start; transition: all .18s ease; }
+    .category-chip.active, .category-chip:hover { border-color: #b7a16d; background: #36382f; color: #f3e7c7; }
+    .menu-section { margin: 24px 0 0; }
+    .menu-section:first-child { margin-top: 4px; }
+    .category-heading { display: flex; align-items: center; gap: 7px; margin: 0 4px 10px; color: #e4e6df; font-size: 14px; font-weight: 700; }
+    .category-count { display: inline-grid; min-width: 18px; height: 18px; place-items: center; border-radius: 50%; background: #344144; color: #aab8b4; font-size: 10px; }
+    .product-list { display: grid; gap: 10px; }
+    .product-card { min-width: 0; display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 13px; padding: 11px; border: 1px solid rgba(220, 235, 230, .035); border-radius: 15px; background: #1b2426; box-shadow: 0 7px 18px #00000012; cursor: pointer; transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+    .product-card:hover { transform: translateY(-2px); border-color: #b7a16d66; box-shadow: 0 12px 24px #0002; }
+    .product-card > img { width: 88px; height: 88px; border-radius: 11px; object-fit: cover; }
+    .image-loading { background: linear-gradient(100deg, #263234 25%, #354345 40%, #263234 65%); background-size: 220% 100%; animation: image-shimmer 1.25s ease-in-out 2; }
+    @keyframes image-shimmer { to { background-position-x: -220%; } }
+    .product-card > img.product-image-placeholder, .dish-tile img.product-image-placeholder, .cart-item img.product-image-placeholder { padding: 17px; object-fit: contain; opacity: .8; filter: invert(1); background: transparent; }
+    .product-info { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
+    .product-info h3 { margin: 1px 0 4px; color: #f4f2ec; font-size: 13px; line-height: 1.35; font-weight: 800; }
+    .product-info p { display: -webkit-box; margin: 0 0 7px; overflow: hidden; color: #98a4a1; font-size: 11px; line-height: 1.42; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .product-bottom { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; }
+    .product-price { color: #f3f1e9; font-size: 16px; font-weight: 800; white-space: nowrap; }
+    .add-button, .primary-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 35px; padding: 0 11px; border: 0; border-radius: 9px; background: var(--action-bg); color: var(--action-ink); font-size: 10px; font-weight: 800; transition: transform .16s ease, background .2s ease, color .2s ease, box-shadow .16s ease; }
+    .add-button:hover, .primary-button:hover { transform: translateY(-1px); background: var(--action-hover); box-shadow: 0 5px 17px #0000001c; }
+    .add-button:active, .primary-button:active { transform: scale(.97); }
+    .quantity-control { display: inline-flex; align-items: center; gap: 10px; min-height: 32px; padding: 3px; border-radius: 9px; background: var(--quantity-bg); color: var(--quantity-ink); font-size: 12px; font-weight: 800; transition: background .2s ease, color .2s ease; }
+    .quantity-control button { width: 27px; height: 26px; display: grid; place-items: center; border: 0; border-radius: 7px; background: var(--quantity-button); color: var(--quantity-button-ink); font-size: 17px; line-height: 1; transition: background .2s ease, color .2s ease, transform .16s ease; }
+    .quantity-control button:active { transform: scale(.92); }
+    #app.view-enter { animation: view-enter .26s cubic-bezier(.2, .75, .25, 1) both; }
+    @keyframes view-enter { from { opacity: .55; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    button, a, .category-chip, .venue-tab, .table-seat, .offer-card, .review-card { -webkit-tap-highlight-color: transparent; }
+    .product-backdrop { position: fixed; z-index: 15; inset: 0; display: grid; place-items: center; overflow-y: auto; overscroll-behavior: contain; padding: max(14px, env(safe-area-inset-top)) 12px max(14px, env(safe-area-inset-bottom)); background: #050909a8; backdrop-filter: blur(7px); animation: backdrop-in .2s ease both; }
+    @keyframes backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+    .product-modal { position: relative; width: min(100%, 496px); max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 28px); display: grid; grid-template-rows: auto minmax(0, 1fr); overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--page-solid); box-shadow: 0 24px 70px #0006; animation: sheet-in .3s cubic-bezier(.16, 1, .3, 1) both; }
+    @keyframes sheet-in { from { opacity: .7; transform: translateY(8px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .product-modal-image { width: 100%; height: clamp(150px, 34dvh, 300px); display: block; object-fit: cover; background-color: var(--panel); }
+    .product-modal-image.product-image-placeholder { padding: 70px; object-fit: contain; background: transparent; filter: invert(1); }
+    .product-modal-close { position: absolute; z-index: 1; top: 12px; right: 12px; width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid #ffffff50; border-radius: 50%; background: #111a1dcc; color: white; font-size: 23px; }
+    .product-modal-content { min-height: 0; display: grid; align-content: start; gap: 12px; overflow-y: auto; overscroll-behavior: contain; padding: 17px 19px max(17px, env(safe-area-inset-bottom)); }
+    .product-modal-content h2 { margin: 0; color: var(--heading); font: 600 26px/1.1 var(--serif); }
+    .product-modal-description { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; white-space: pre-line; }
+    .product-modal-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 5px; }
+    .product-modal-footer .add-button { min-height: 42px; padding-inline: 16px; }
+    body.product-open { overflow: hidden; }
+    .home-brand-banner { position: relative; height: clamp(140px, 34vw, 190px); overflow: hidden; margin: 0 0 17px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+    .home-brand-banner img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center 49%; }
+    .home-brand-banner::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #09100c42, transparent 70%); pointer-events: none; }
+    .home-carousel { position: relative; overflow: hidden; margin: 17px 0 24px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+    .home-slide-frame { position: relative; height: clamp(170px, 49vw, 245px); overflow: hidden; }
+    .home-slide-frame img { width: 100%; height: 100%; display: block; object-fit: cover; transition: opacity .35s ease, transform .6s ease; }
+    .home-slide-frame img.changing { opacity: .35; transform: scale(1.015); }
+    .home-slide-caption { position: absolute; right: 12px; bottom: 12px; padding: 6px 9px; border: 1px solid #ffffff3d; border-radius: 7px; background: #101817ad; color: #fff; font-size: 9px; font-weight: 800; }
+    .home-slide-dots { position: absolute; z-index: 1; top: 10px; right: 10px; display: flex; gap: 6px; }
+    .home-slide-dots button { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 99px; background: #ffffff94; }
+    .home-slide-dots button.active { width: 19px; background: #fff; }
+    .delivery-location { display: grid; gap: 9px; padding: 12px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel); }
+    .delivery-location-title { color: var(--heading); font-size: 11px; font-weight: 800; }
+    .coordinate-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .coordinate-fields input { min-width: 0; width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid var(--outline); border-radius: 8px; background: var(--field-bg); color: var(--ink); font-size: 11px; }
+    .location-actions { display: flex; align-items: center; gap: 9px; }
+    .location-actions button { min-height: 37px; padding: 0 10px; border: 1px solid var(--outline); border-radius: 8px; background: var(--panel-raised); color: var(--heading); font-size: 10px; font-weight: 800; }
+    .location-actions a, .location-status { color: var(--muted); font-size: 9px; text-decoration: none; }
+    #delivery-map-link { font-weight: 800; white-space: nowrap; }
+    .promo-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0 4px; }
+    .promo-action { min-height: 112px; display: grid; align-content: space-between; gap: 10px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(145deg, var(--panel-raised), var(--panel)); text-align: left; }
+    .promo-action strong { color: var(--heading); font-size: 12px; }
+    .promo-action span { color: var(--muted); font-size: 10px; line-height: 1.45; }
+    .promo-action.primary { border-color: var(--booking-border); background: var(--booking-bg); }
+    .promo-action.primary strong { color: var(--booking-ink); }
+    .two-gis-review { display: grid; gap: 12px; margin: 24px 0 5px; padding: 17px; border: 1px solid var(--line); border-radius: 15px; background: var(--panel); }
+    .two-gis-score { display: flex; align-items: baseline; gap: 8px; }
+    .two-gis-score strong { color: var(--heading); font: 600 27px/1 var(--serif); }
+    .two-gis-score span { color: var(--gold); font-size: 13px; }
+    .two-gis-review p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .two-gis-actions { display: flex; gap: 8px; }
+    .two-gis-actions a { flex: 1; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--outline); border-radius: 9px; color: var(--heading); font-size: 10px; font-weight: 800; text-align: center; text-decoration: none; }
+    .two-gis-actions svg { width: 14px; height: 14px; flex: 0 0 auto; }
+    .two-gis-actions a.primary { border-color: var(--action-bg); background: var(--action-bg); color: var(--action-ink); }
+    .floating-actions { position: fixed; z-index: 6; bottom: calc(73px + env(safe-area-inset-bottom)); left: 50%; width: min(calc(100% - 24px), 496px); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 7px; border: 1px solid #364344; border-radius: 15px; background: rgba(16, 25, 27, .94); box-shadow: 0 10px 34px #0008; transform: translateX(-50%); backdrop-filter: blur(14px); }
+    .floating-actions button { min-height: 42px; border: 0; border-radius: 10px; font-size: 11px; font-weight: 800; }
+    .floating-book { background: #344649; color: #edf2ee; }
+    .floating-route { background: var(--green); color: #062013; }
+    .bottom-nav { position: fixed; z-index: 8; bottom: 0; left: 50%; width: min(100%, 520px); min-height: calc(66px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(4, 1fr); padding: 8px 14px calc(8px + env(safe-area-inset-bottom)); border-top: 1px solid rgba(202, 220, 215, .1); background: rgba(11, 18, 20, .97); transform: translateX(-50%); backdrop-filter: blur(18px); }
+    .bottom-nav button { display: grid; justify-items: center; align-content: center; gap: 4px; border: 0; border-radius: 10px; background: transparent; color: #83908f; }
+    .bottom-nav button.active { color: #d8c28c; }
+    .bottom-nav svg { width: 20px; height: 20px; }
+    .bottom-nav span { font-size: 9px; font-weight: 700; }
+    .empty-state, .surface { padding: 17px; border: 1px solid var(--line); border-radius: 15px; background: var(--panel); }
+    .muted { color: var(--muted); }
+    .stack { display: grid; gap: 14px; }
+    .field { display: grid; gap: 7px; color: #b8c2bf; font-size: 11px; font-weight: 700; }
+    .field input, .field select, .field textarea { width: 100%; min-height: 46px; padding: 11px 13px; border: 1px solid #354447; border-radius: 11px; background: #121d20; color: var(--ink); font-size: 13px; }
+    .field textarea { min-height: 82px; resize: vertical; }
+    .field input::placeholder, .field textarea::placeholder { color: #748180; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .floor-plan { position: relative; margin-bottom: 15px; padding: 14px; border: 1px solid #485454; border-radius: 14px; background: repeating-linear-gradient(0deg, transparent, transparent 39px, #a4b0a20b 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, #a4b0a20b 40px), #182326; }
+    .floor-label { display: block; margin-bottom: 11px; color: #aeb8b3; font-size: 9px; font-weight: 800; letter-spacing: .7px; }
+    .floor-zones { display: grid; grid-template-columns: 1.2fr .8fr; gap: 8px; margin-bottom: 10px; }
+    .floor-zone { display: grid; min-height: 55px; place-items: center; border: 1px solid #53615e; border-radius: 8px; background: #293638bd; color: #d2d7d0; font-size: 9px; font-weight: 800; text-align: center; }
+    .floor-zone.vip { min-height: 55px; border-style: dashed; color: #d4c394; }
+    .table-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .table-seat { min-height: 46px; display: grid; place-items: center; gap: 1px; border: 1px solid #596663; border-radius: 9px; background: #303d3d; color: #dfe5dc; transition: all .18s ease; }
+    .table-seat span { font-size: 12px; font-weight: 800; }
+    .table-seat small { color: #aab7b0; font-size: 8px; }
+    .table-seat.selected { border-color: var(--green); background: #0c6134; box-shadow: 0 0 0 2px #00c8532d, 0 0 18px #00c85331; color: white; }
+    .primary-button { width: 100%; min-height: 48px; margin-top: 3px; border-radius: 11px; font-size: 11px; letter-spacing: .4px; text-transform: uppercase; }
+    .booking-list { display: grid; gap: 9px; margin-top: 13px; }
+    .booking-row { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+    .booking-row p { margin: 6px 0 0; color: var(--muted); font-size: 11px; }
+    .badge { padding: 4px 8px; border-radius: 999px; background: #32403f; color: #c2cec7; font-size: 9px; }
+    .rating-panel { margin-bottom: 14px; padding: 19px 16px; border: 1px solid #4a4535; border-radius: 15px; background: linear-gradient(135deg, #242922, #1b2424); text-align: center; }
+    .rating-panel strong { display: block; margin: 5px 0; color: #f1e9d8; font-size: 21px; }
+    .stars { color: var(--gold); font-size: 18px; letter-spacing: 2px; }
+    .rating-panel p { margin: 7px 0 0; color: #9ea9a3; font-size: 10px; }
+    .review-card { padding: 15px; border: 1px solid var(--line); border-radius: 15px; background: #1b2426; }
+    .review-head { display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 35px; height: 35px; display: grid; place-items: center; border-radius: 50%; background: #334444; color: #e8d69e; font-weight: 800; }
+    .review-head strong { font-size: 12px; }
+    .review-head small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+    .review-text { margin: 12px 0; color: #d0d5ce; font-size: 12px; line-height: 1.65; }
+    .owner-reply { padding: 11px; border-radius: 11px; background: #293437; }
+    .owner-reply strong { color: #dfc77f; font-size: 9px; letter-spacing: .5px; }
+    .owner-reply p { margin: 5px 0 0; color: #bec8c2; font-size: 10px; line-height: 1.55; }
+    .cart-list { display: grid; gap: 9px; }
+    .cart-item { display: grid; grid-template-columns: 62px minmax(0, 1fr) auto; align-items: center; gap: 11px; padding: 10px; border: 1px solid var(--line); border-radius: 13px; background: var(--panel); }
+    .cart-item img { width: 62px; height: 62px; border-radius: 9px; object-fit: cover; }
+    .cart-item h3 { margin: 0 0 5px; font-size: 11px; line-height: 1.4; color: var(--heading); }
+    .cart-item strong { font-size: 12px; }
+    .remove-button { align-self: start; border: 0; background: transparent; color: #899694; font-size: 18px; }
+    .segmented { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 11px; background: #111b1d; }
+    .segmented button { min-width: 0; min-height: 36px; padding: 5px 4px; border: 0; border-radius: 8px; background: transparent; color: #9aa8a5; font-size: 9px; line-height: 1.25; font-weight: 800; }
+    .segmented button.active { background: #344346; color: #f0f3ed; }
+    .totals { display: grid; gap: 9px; margin: 17px 2px 12px; }
+    .totals div { display: flex; justify-content: space-between; gap: 14px; color: #aeb8b3; font-size: 11px; }
+    .totals .grand-total { padding-top: 10px; border-top: 1px solid var(--line); color: #f3f1e9; font-size: 14px; font-weight: 800; }
+    .offer-card { overflow: hidden; margin-bottom: 11px; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(125deg, #283638, #192426); color: var(--heading); }
+    .offer-card h3 { margin: 0 0 6px; font-size: 14px; }
+    .offer-card p { margin: 0; color: #a8b4b0; font-size: 11px; line-height: 1.55; }
+    .actions { display: flex; flex-wrap: wrap; gap: 7px; }
+    .actions button { padding: 9px 11px; border: 1px solid #445352; border-radius: 9px; background: #263436; color: #e0e6df; font-size: 11px; }
+    .actions button.active, .actions button.primary { border-color: var(--green); background: var(--green); color: #062013; }
+    .item { padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .item p { margin: 5px 0; color: var(--muted); font-size: 11px; }
+    .item h3 { margin: 0; font-size: 13px; }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    label { display: grid; gap: 6px; color: #bac4c0; font-size: 11px; }
+    label input, label select, label textarea { width: 100%; min-height: 41px; padding: 9px 11px; border: 1px solid #354447; border-radius: 9px; background: #121d20; color: var(--ink); }
+    label textarea { min-height: 74px; }
+    [hidden] { display: none !important; }
+    @media (min-width: 600px) {
+      body { padding: 22px 0; background-color: var(--page-solid); }
+      .app-shell { min-height: calc(100vh - 44px); border: 1px solid #293638; border-radius: 22px; background: linear-gradient(180deg, #10282b, #0a1012 560px); box-shadow: 0 24px 80px #0008; }
+      .topbar { border-radius: 22px 22px 0 0; }
+      .bottom-nav { bottom: 22px; border-radius: 0 0 22px 22px; }
+      .floating-actions { bottom: 94px; }
+    }
+    @media (max-width: 360px) {
+      .topbar { padding-inline: 12px; gap: 6px; }
+      .brand { gap: 5px; }
+      .brand-mark { width: 42px; height: 42px; }
+      .brand-name strong { font-size: 19px; }
+      .header-controls { gap: 4px; }
+      .language-switch button { min-width: 28px; padding-inline: 4px; }
+      .theme-toggle { width: 34px; min-height: 34px; }
+      main { padding-inline: 14px; }
+      .horizontal-dishes, .category-strip, .venue-tabs { margin-inline: -14px; padding-inline: 14px; }
+      .product-card { grid-template-columns: 76px minmax(0, 1fr); gap: 10px; padding: 9px; }
+      .product-card > img { width: 76px; height: 82px; }
+      .product-info h3 { font-size: 12px; }
+      .product-price { font-size: 14px; }
+      .product-backdrop { padding-inline: 8px; }
+      .product-modal { border-radius: 16px; }
+      .product-modal-image { height: clamp(135px, 29dvh, 230px); }
+      .home-carousel { margin-inline: -2px; }
+    }
+    @media (max-width: 520px) {
+      .product-backdrop { display: block; overflow: hidden; padding: 0; }
+      .product-modal { width: 100%; height: 100dvh; max-height: 100dvh; grid-template-rows: auto minmax(0, 1fr); border: 0; border-radius: 0; }
+      .product-modal-image { height: clamp(150px, 32dvh, 280px); }
+      .product-modal-content { padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+    }
+    :root[data-theme="light"] body { color: var(--ink); }
+    :root[data-theme="light"] body .app-shell { background: var(--page-gradient); border-color: #d7e1dc; box-shadow: 0 24px 80px #173a2718; }
+    :root[data-theme="light"] body .topbar { background: var(--topbar-bg); }
+    :root[data-theme="light"] body .brand-name,
+    :root[data-theme="light"] body .home-intro h1,
+    :root[data-theme="light"] body .section-heading h2,
+    :root[data-theme="light"] body .page-title,
+    :root[data-theme="light"] body .category-heading,
+    :root[data-theme="light"] body .product-info h3,
+    :root[data-theme="light"] body .product-price,
+    :root[data-theme="light"] body .dish-tile h3,
+    :root[data-theme="light"] body .dish-tile strong,
+    :root[data-theme="light"] body .cart-item h3 { color: var(--heading); }
+    :root[data-theme="light"] body .brand-since,
+    :root[data-theme="light"] body .eyebrow,
+    :root[data-theme="light"] body .home-intro p,
+    :root[data-theme="light"] body .product-info p,
+    :root[data-theme="light"] body .muted,
+    :root[data-theme="light"] body .booking-row p,
+    :root[data-theme="light"] body .offer-card p,
+    :root[data-theme="light"] body .floor-label,
+    :root[data-theme="light"] body label { color: var(--muted); }
+    :root[data-theme="light"] body .quick-action,
+    :root[data-theme="light"] body .dish-tile,
+    :root[data-theme="light"] body .product-card,
+    :root[data-theme="light"] body .empty-state,
+    :root[data-theme="light"] body .surface,
+    :root[data-theme="light"] body .booking-row,
+    :root[data-theme="light"] body .review-card,
+    :root[data-theme="light"] body .cart-item { border-color: var(--line); background: var(--card); box-shadow: 0 5px 18px #213b2d0b; }
+    :root[data-theme="light"] body .quick-action { color: var(--ink); }
+    :root[data-theme="light"] body .quick-action span { color: var(--muted); }
+    :root[data-theme="light"] body .quick-action svg { color: #53746a; }
+    :root[data-theme="light"] body .search-box,
+    :root[data-theme="light"] body .language-switch,
+    :root[data-theme="light"] body .theme-toggle,
+    :root[data-theme="light"] body .field input,
+    :root[data-theme="light"] body .field select,
+    :root[data-theme="light"] body .field textarea,
+    :root[data-theme="light"] body label input,
+    :root[data-theme="light"] body label select,
+    :root[data-theme="light"] body label textarea { border-color: var(--outline); background: var(--field-bg); color: var(--ink); }
+    :root[data-theme="light"] body .category-chip { border-color: #d0c9bd; background: #f4f1eb; color: #615a50; }
+    :root[data-theme="light"] body .category-chip.active,
+    :root[data-theme="light"] body .category-chip:hover { border-color: #8f806b; background: #ded6c9; color: #302d29; }
+    :root[data-theme="light"] body .category-count,
+    :root[data-theme="light"] body .badge { background: #e2ddd4; color: #615a50; }
+    :root[data-theme="light"] body .floor-plan { border-color: #cbd7d1; background-color: #edf3ef; }
+    :root[data-theme="light"] body .floor-zone { border-color: #bfcdc6; background: #e3ebe6; color: #30443b; }
+    :root[data-theme="light"] body .floor-zone.vip { color: #826a34; }
+    :root[data-theme="light"] body .table-seat { border-color: #bdcbc4; background: #e2ebe6; color: #2a3d34; }
+    :root[data-theme="light"] body .table-seat small { color: #667772; }
+    :root[data-theme="light"] body .table-seat.selected { border-color: var(--green-dark); background: #d4f1de; color: #103c25; }
+    :root[data-theme="light"] body .rating-panel,
+    :root[data-theme="light"] body .offer-card { border-color: #ded8c4; background: var(--warm-panel); }
+    :root[data-theme="light"] body .rating-panel strong { color: #332f23; }
+    :root[data-theme="light"] body .rating-panel p { color: #6d6a5e; }
+    :root[data-theme="light"] body .owner-reply { background: #e5ece8; }
+    :root[data-theme="light"] body .owner-reply p,
+    :root[data-theme="light"] body .review-text { color: #465650; }
+    :root[data-theme="light"] body .avatar { background: #e9e4d3; color: #705b2a; }
+    :root[data-theme="light"] body .segmented { background: #e5ece8; }
+    :root[data-theme="light"] body .segmented button { color: #53635e; }
+    :root[data-theme="light"] body .segmented button.active { background: #d1ddd7; color: #21332d; }
+    :root[data-theme="light"] body .totals div { color: #62706c; }
+    :root[data-theme="light"] body .totals .grand-total { color: #1c2b26; }
+    :root[data-theme="light"] body .floating-actions { border-color: #cbc3b7; background: rgba(246, 243, 237, .96); }
+    :root[data-theme="light"] body .floating-book { background: #e4ded4; color: #302d29; }
+    :root[data-theme="light"] body .promo-action.primary span { color: #6d665c; }
+    :root[data-theme="light"] body .bottom-nav { border-color: #d6dfda; background: var(--nav-bg); }
+    :root[data-theme="light"] body .bottom-nav button { color: #6b7974; }
+    :root[data-theme="light"] body .bottom-nav button.active { color: #806b34; }
+    :root[data-theme="light"] body .venue-tab { color: #62716b; }
+    :root[data-theme="light"] body .venue-tab.active { background: #e1dcd2; color: #302d29; }
+    :root[data-theme="light"] body .actions button { border-color: #cdc5b9; background: #efebe4; color: #484239; }
+    :root[data-theme="light"] body .actions button.active,
+    :root[data-theme="light"] body .actions button.primary { border-color: var(--action-bg); background: var(--action-bg); color: var(--action-ink); }
+    :root[data-theme="light"] body .item { border-color: var(--line); }
+    :root[data-theme="light"] body .section-heading a,
+    :root[data-theme="light"] body .text-button { color: #426e61; }
+    :root[data-theme="light"] body .product-card,
+    :root[data-theme="light"] body .dish-tile,
+    :root[data-theme="light"] body .quick-action,
+    :root[data-theme="light"] body .search-box,
+    :root[data-theme="light"] body .bottom-nav,
+    :root[data-theme="light"] body .field input,
+    :root[data-theme="light"] body .field select,
+    :root[data-theme="light"] body .field textarea { transition: background-color .28s ease, border-color .28s ease, color .28s ease, box-shadow .28s ease; }
+    :root[data-theme="light"] body .notice { color: #184328; background: #e1f4e7; }
+    :root[data-theme="light"] body .notice.error { color: #642b2b; background: #f8e7e5; }
+    :root[data-theme="light"] body .quantity-control button { background: var(--quantity-button); color: var(--quantity-button-ink); }
+    :root[data-theme="light"] body .floor-plan { border-color: #c9c0b3; background-color: #eeeae2; }
+    :root[data-theme="light"] body .floor-zone { border-color: #c8c0b5; background: #e7e2d9; color: #484239; }
+    :root[data-theme="light"] body .floor-zone.vip { color: #806b4e; }
+    :root[data-theme="light"] body .table-seat { border-color: #c8c0b5; background: #e7e2d9; color: #39352f; }
+    :root[data-theme="light"] body .table-seat.selected { border-color: #8f806b; background: #ddd4c6; color: #302d29; box-shadow: 0 0 0 2px #8f806b2b, 0 0 18px #8f806b20; }
+    :root[data-theme="light"] body .segmented { background: #e4dfd6; }
+    :root[data-theme="light"] body .segmented button { color: #655f56; }
+    :root[data-theme="light"] body .segmented button.active { background: #d5cec2; color: #302d29; }
+    :root[data-theme="light"] body .owner-reply { background: #e7e1d7; }
+    :root[data-theme="light"] body .section-heading a,
+    :root[data-theme="light"] body .text-button { color: #665c4d; }
+    :root[data-theme="light"] body .product-card,
+    :root[data-theme="light"] body .dish-tile { box-shadow: 0 8px 24px rgba(58, 49, 37, .08), 0 1px 3px rgba(58, 49, 37, .05); }
+    :root[data-theme="light"] body .product-image-placeholder { filter: none; }
+    @media (prefers-reduced-motion: no-preference) {
+      @supports (view-transition-name: root) {
+        :root { view-transition-name: root; }
+      }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#home" data-go="home" aria-label="Stories, since 2018">
+        <img class="brand-mark" src="/logo.png" alt="Stories" width="48" height="48" fetchpriority="high">
+        <span class="brand-name"><strong>Stories</strong><small>Lounge Bar</small></span>
+      </a>
+      <div class="header-controls">
+        <div class="language-switch" id="language-switch" role="group" aria-label="Язык">
+          <button type="button" data-language="ru" class="active" aria-pressed="true">Ru</button>
+          <button type="button" data-language="kk" aria-pressed="false">Kz</button>
+        </div>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Сменить тему" title="Сменить тему"></button>
+      </div>
+      <span id="user-label"></span>
+    </header>
+    <div id="toast" aria-live="polite"></div>
+    <main id="app"><p class="muted">Загрузка…</p></main>
+    <nav id="nav" class="bottom-nav" aria-label="Главная навигация"></nav>
+  </div>
+  <div id="overlay-root"></div>
+<script>
+(() => {
+  const tg = window.Telegram?.WebApp;
+  tg?.ready();
+  tg?.expand();
+  const initData = tg?.initData || '';
+  const devMode = new URLSearchParams(location.search).get('demo') === '1';
+  const devId = new URLSearchParams(location.search).get('id') || '111111';
+  const state = { user: null, menu: [], tables: [], bookings: [], orders: [], offers: [], cart: {}, deliveryDetails: { address: '', contact_phone: '', latitude: '', longitude: '' }, section: 'home', adminTab: 'bookings', category: 'all', selectedTable: null, selectedProduct: null, detailQuantity: 1, orderType: 'delivery', homeSlideIndex: 0, language: 'ru', theme: 'dark', translations: {} };
+  const app = document.querySelector('#app');
+  const nav = document.querySelector('#nav');
+  const overlayRoot = document.querySelector('#overlay-root');
+  const twoGisUrl = 'https://2gis.kz/almaty/firm/70000001031991976';
+  const twoGisReviewUrl = `${twoGisUrl}/tab/reviews`;
+  const twoGisRouteUrl = 'https://2gis.kz/almaty/center/76.949666,43.262209/zoom/16/routeTab/rsType/bus/to/76.949666,43.262209';
+  const homeSlides = [
+    '/pictures/stories_kamiqr/menuSlides/2bfd3e81064649cf9b801445939b5988.webp',
+    '/pictures/stories_kamiqr/menuSlides/363227702f434ecf8a7adc8d47e8e6a5.webp',
+    '/pictures/stories_kamiqr/menuSlides/e778b3c72fe249629117765e1fde19ba.webp',
+    '/pictures/stories_kamiqr/menuSlides/f445d73216e84a02995d8482422ebab8.webp',
+    '/pictures/stories_kamiqr/menuSlides/f57a100c48e3444a835c27ec51593988.webp'
+  ];
+  let homeSlideTimer;
+  let toastTimer;
+  const esc = (value) => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const money = (value) => `${Number(value).toLocaleString('ru-RU', { maximumFractionDigits: 0 })} ₸`;
+  const t = (value) => state.translations?.[state.language]?.text?.[value] || value;
+  function sentenceCase(value) {
+    const locale = state.language === 'kk' ? 'kk-KZ' : 'ru-RU';
+    const normalized = String(value ?? '').trim().toLocaleLowerCase(locale);
+    return normalized ? normalized[0].toLocaleUpperCase(locale) + normalized.slice(1) : '';
+  }
+  function localizedItem(item, key) {
+    const value = state.language === 'kk' ? (item[`${key}_kk`] || item[key] || '') : (item[key] || '');
+    return key === 'title' ? sentenceCase(value) : value;
+  }
+  const categoryOrder = ['Хиты продаж', 'Закуски', 'Супы', 'Салаты', 'Паста', 'Стейки', 'Горячие блюда', 'Бургеры', 'Гарниры', 'Пицца с сырными бортиками', 'Роллы', 'Хлеб', 'Десерты', 'Напитки', 'Лимонады', 'Кофе', 'Чай Tea Lim', 'Авторский чай', 'Авторский чай без сахара', 'Листовой чай', 'Свежевыжатые соки', 'Молочные коктейли', 'Смузи', 'Айс-ти', 'Кофе со льдом', 'Соусы', 'Дополнительно'];
+  function sortCategories(categories) {
+    return categories.sort((left, right) => {
+      const leftIndex = categoryOrder.indexOf(left);
+      const rightIndex = categoryOrder.indexOf(right);
+      return (leftIndex < 0 ? 100 : leftIndex) - (rightIndex < 0 ? 100 : rightIndex) || left.localeCompare(right, 'ru');
+    });
+  }
+  function categoryLabel(category) {
+    if (state.language !== 'kk') return category;
+    return state.menu.find(item => item.category === category)?.category_kk || category;
+  }
+  function localizeDom(root) {
+    const dictionary = state.translations?.[state.language];
+    if (!dictionary) return;
+    const translateAttributes = element => {
+      const placeholder = element.getAttribute('placeholder');
+      if (dictionary.placeholders?.[placeholder]) element.setAttribute('placeholder', dictionary.placeholders[placeholder]);
+      const ariaLabel = element.getAttribute('aria-label');
+      if (dictionary.aria?.[ariaLabel]) element.setAttribute('aria-label', dictionary.aria[ariaLabel]);
+    };
+    if (root.nodeType === Node.ELEMENT_NODE) translateAttributes(root);
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = walker.nextNode())) {
+      const text = node.nodeValue.trim();
+      if (dictionary.text?.[text]) node.nodeValue = node.nodeValue.replace(text, dictionary.text[text]);
+    }
+    root.querySelectorAll('[placeholder], [aria-label]').forEach(translateAttributes);
+    root.querySelectorAll('.badge').forEach(element => {
+      const value = element.textContent.trim();
+      if (dictionary.statuses?.[value]) element.textContent = dictionary.statuses[value];
+    });
+  }
+  function applyPreferences() {
+    document.documentElement.dataset.theme = state.theme;
+    document.documentElement.lang = state.language === 'kk' ? 'kk' : 'ru';
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', state.theme === 'light' ? '#e7e2d9' : '#080d0f');
+    document.querySelectorAll('[data-language]').forEach(button => {
+      const active = button.dataset.language === state.language;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    document.querySelector('#language-switch')?.setAttribute('aria-label', t('Язык'));
+    document.querySelector('.brand')?.setAttribute('aria-label', t('Stories, since 2018'));
+    const brandType = document.querySelector('.brand-name small');
+    if (brandType) brandType.textContent = t('Lounge Bar');
+    const button = document.querySelector('#theme-toggle');
+    if (button) {
+      const label = state.theme === 'dark' ? t('Светлая тема') : t('Тёмная тема');
+      button.innerHTML = `${icon(state.theme === 'dark' ? 'sun' : 'moon')}<span>${esc(state.theme === 'dark' ? t('Тёмная') : t('Светлая'))}</span>`;
+      button.setAttribute('aria-label', label);
+      button.title = label;
+    }
+  }
+  function switchThemeFromControl(control) {
+    const rect = control.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + rect.height / 2;
+    const farX = Math.max(originX, window.innerWidth - originX);
+    const farY = Math.max(originY, window.innerHeight - originY);
+    const radius = Math.ceil(Math.hypot(farX, farY));
+    const nextTheme = state.theme === 'dark' ? 'light' : 'dark';
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const updateTheme = () => {
+      state.theme = nextTheme;
+      try { localStorage.setItem('stories-theme', state.theme); } catch (_) {}
+      applyPreferences();
+    };
+
+    if (reducedMotion || !document.startViewTransition) {
+      updateTheme();
+      return;
+    }
+    document.documentElement.style.setProperty('--theme-wave-x', `${originX}px`);
+    document.documentElement.style.setProperty('--theme-wave-y', `${originY}px`);
+    document.documentElement.style.setProperty('--theme-wave-radius', `${radius}px`);
+    document.startViewTransition(updateTheme).ready.catch(() => {});
+  }
+  const toast = (message, error = false) => {
+    const el = document.querySelector('#toast');
+    el.innerHTML = `<div class="notice ${error ? 'error' : ''}">${esc(message)}</div>`;
+    localizeDom(el);
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { el.innerHTML = ''; }, 4500);
+  };
+  async function api(path, options = {}) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (initData) headers['X-Telegram-Init-Data'] = initData;
+    else if (devMode) headers['X-Dev-Telegram-Id'] = devId;
+    const response = await fetch(path, { ...options, headers: { ...headers, ...options.headers } });
+    if (!response.ok) {
+      let message = `Ошибка ${response.status}`;
+      try { const data = await response.json(); message = data.detail || message; } catch (_) {}
+      throw new Error(message);
+    }
+    return response.status === 204 ? null : response.json();
+  }
+  const icon = (name) => ({
+    home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>',
+    menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="7" cy="6" r=".6" fill="currentColor"/><circle cx="7" cy="12" r=".6" fill="currentColor"/><circle cx="7" cy="18" r=".6" fill="currentColor"/></svg>',
+    cart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 4h2l2.2 11.1a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>',
+    profile: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>',
+    booking: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 11V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4M3 13h18v6M6 19v2m12-2v2M5 11h14a2 2 0 0 1 2 2v2H3v-2a2 2 0 0 1 2-2Z"/></svg>',
+    reviews: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.7 8.7 0 0 1-3-.5L4 20l1.5-4A7.2 7.2 0 0 1 4 11.5 7.5 7.5 0 0 1 12 4a7.5 7.5 0 0 1 8 7.5Z"/><path d="M8 11h8m-8 3h5"/></svg>',
+      contact: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3h3l2 5-2 1.5a15 15 0 0 0 4.5 4.5L16 12l5 2v3c0 1.1-.9 2-2 2C10 19 5 14 5 5c0-1.1.9-2 2-2Z"/></svg>',
+    pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    external: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 4h6v6m0-6-9 9"/><path d="M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5"/></svg>'
+    ,sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>',
+    moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5a8.6 8.6 0 1 0 12 12Z"/></svg>'
+  }[name] || '');
+  const navItems = [['home', 'Главная'], ['menu', 'Меню'], ['cart', 'Корзина'], ['profile', 'Профиль']];
+  function renderNav() {
+    const items = [...navItems];
+    if (state.user?.role === 'admin') items.push(['admin', 'Админ']);
+    nav.setAttribute('aria-label', t('Домашняя навигация'));
+    nav.innerHTML = items.map(([id, title]) => `<button data-nav="${id}" class="${state.section === id ? 'active' : ''}">${icon(id === 'profile' ? 'profile' : id)}<span>${esc(t(title))}${id === 'cart' && Object.values(state.cart).some(Boolean) ? ` · ${Object.values(state.cart).reduce((a, b) => a + b, 0)}` : ''}</span></button>`).join('');
+  }
+  function imageFor(item) {
+    if (!item.image_path || item.image_path === '/logo.png' || item.image_path === '/static/images/menu/placeholder.svg' || item.image_path === '/static/images/stories-mark.svg') return '/static/images/stories-logo-transparent.png';
+    if (item.image_path) return item.image_path;
+    return '/static/images/stories-logo-transparent.png';
+  }
+  const isPlaceholderImage = source => source.endsWith('/stories-logo-transparent.png');
+  function preloadImages(items) {
+    items.forEach(item => {
+      const source = imageFor(item);
+      const url = new URL(source, location.href).href;
+      const exists = [...document.querySelectorAll('link[rel="preload"][as="image"]')].some(link => link.href === url);
+      if (exists) return;
+      const preload = document.createElement('link');
+      preload.rel = 'preload';
+      preload.as = 'image';
+      preload.href = source;
+      preload.fetchPriority = 'high';
+      document.head.append(preload);
+    });
+  }
+  function contactMapPreview() {
+    return `<a class="contact-map-preview" href="${twoGisUrl}" data-2gis-link aria-label="${esc(t('Открыть карту Stories Lounge Bar в 2GIS'))}"><span class="contact-map-pin" style="left:52%;top:49%">${icon('pin')}</span></a>`;
+  }
+  function quantityControl(id, quantity) {
+    return `<span class="quantity-control"><button type="button" data-quantity="${id}" data-delta="-1" aria-label="Уменьшить количество">−</button><span>${quantity}</span><button type="button" data-quantity="${id}" data-delta="1" aria-label="Увеличить количество">+</button></span>`;
+  }
+  function productCard(item, priority = false) {
+    const quantity = state.cart[item.id] || 0;
+    const title = localizedItem(item, 'title');
+    const description = localizedItem(item, 'description');
+    const source = imageFor(item);
+    const placeholder = isPlaceholderImage(source);
+    return `<article class="product-card" role="button" tabindex="0" data-product="${item.id}" aria-label="${esc(t('Открыть блюдо'))}: ${esc(title)}"><img class="${placeholder ? 'product-image-placeholder' : 'image-loading'}" src="${esc(source)}" alt="${esc(title)}" width="88" height="88" sizes="88px" loading="${priority ? 'eager' : 'lazy'}" fetchpriority="${priority ? 'high' : 'auto'}" decoding="async" onload="this.classList.remove('image-loading')" onerror="this.onerror=null;this.classList.remove('image-loading');this.src='/static/images/stories-logo-transparent.png';this.classList.add('product-image-placeholder')"><div class="product-info"><h3>${esc(title)}</h3>${description ? `<p>${esc(description)}</p>` : ''}<div class="product-bottom"><strong class="product-price">${money(item.price)}</strong>${quantity ? quantityControl(item.id, quantity) : `<button type="button" class="add-button" data-add="${item.id}" aria-label="${esc(t('Добавить'))} ${esc(title)}">+ ${esc(t('В КОРЗИНУ'))}</button>`}</div></div></article>`;
+  }
+  function dishTile(item, index) {
+    const title = localizedItem(item, 'title');
+    const priority = index < 2;
+    const source = imageFor(item);
+    const placeholder = isPlaceholderImage(source);
+    return `<article class="dish-tile" role="button" tabindex="0" data-product="${item.id}" aria-label="${esc(t('Открыть блюдо'))}: ${esc(title)}"><img class="${placeholder ? 'product-image-placeholder' : 'image-loading'}" src="${esc(source)}" alt="${esc(title)}" width="132" height="112" sizes="132px" loading="${priority ? 'eager' : 'lazy'}" fetchpriority="${priority ? 'high' : 'auto'}" decoding="${priority ? 'sync' : 'async'}" onload="this.classList.remove('image-loading')" onerror="this.onerror=null;this.classList.remove('image-loading');this.src='/static/images/stories-logo-transparent.png';this.classList.add('product-image-placeholder')"><div class="dish-tile-copy"><h3>${esc(title)}</h3><strong>${money(item.price)}</strong></div></article>`;
+  }
+  function renderProductDetail() {
+    const item = state.menu.find(row => row.id === state.selectedProduct);
+    if (!item) return '';
+    const title = localizedItem(item, 'title');
+    const source = imageFor(item);
+    const placeholder = isPlaceholderImage(source);
+    const description = localizedItem(item, 'description') || t('Описание блюда уточните у официанта.');
+    return `<div class="product-backdrop" data-close-product><section class="product-modal" role="dialog" aria-modal="true" aria-labelledby="product-modal-title"><button class="product-modal-close" type="button" data-close-product aria-label="${esc(t('Закрыть'))}">×</button><img class="product-modal-image ${placeholder ? 'product-image-placeholder' : 'image-loading'}" src="${esc(source)}" alt="${esc(title)}" fetchpriority="high" decoding="async" onload="this.classList.remove('image-loading')" onerror="this.onerror=null;this.classList.remove('image-loading');this.src='/static/images/stories-logo-transparent.png';this.classList.add('product-image-placeholder')"><div class="product-modal-content"><span class="eyebrow">${esc(categoryLabel(item.category))}</span><h2 id="product-modal-title">${esc(title)}</h2><p class="product-modal-description">${esc(description)}</p><div class="product-modal-footer"><strong class="product-price">${money(item.price * state.detailQuantity)}</strong><span class="quantity-control"><button type="button" data-detail-quantity="-1" aria-label="${esc(t('Уменьшить количество'))}">−</button><span>${state.detailQuantity}</span><button type="button" data-detail-quantity="1" aria-label="${esc(t('Увеличить количество'))}">+</button></span></div><button class="primary-button" type="button" data-detail-add="${item.id}">${esc(t('Добавить в корзину'))}</button></div></section></div>`;
+  }
+  function renderHome() {
+    const featuredCategories = ['Хиты продаж', 'Горячие блюда', 'Закуски', 'Супы', 'Стейки', 'Десерты'];
+    const curated = featuredCategories.flatMap(category => state.menu.filter(item => item.category === category));
+    const featured = (curated.length ? curated : state.menu).slice(0, 8);
+    preloadImages(featured.slice(0, 2));
+    return `<section class="home-brand-banner" aria-label="${esc(t('Stories Lounge Bar'))}"><img src="/pictures/stories_kamiqr/menuOrgAttrsBackgrounds/c3a3c22ddd8844b3a39750cc4c55744a.webp" alt="${esc(t('Stories Lounge Bar'))}" width="1440" height="762" fetchpriority="high" decoding="sync"></section>
+      <section class="home-intro"><span class="eyebrow">Stories · SINCE 2018</span><h1>${esc(t('Ваш вечер в Stories'))}</h1><p>${esc(t('Еда, встречи и моменты, к которым хочется вернуться.'))}</p></section>
+      <section class="home-carousel" aria-label="${esc(t('Истории Stories'))}"><div class="home-slide-frame"><img id="home-slide-image" src="${homeSlides[state.homeSlideIndex]}" alt="${esc(t('Stories Lounge Bar'))}" width="1440" height="1440" fetchpriority="high" decoding="async"><span class="home-slide-caption">STORIES · LOUNGE</span><div class="home-slide-dots">${homeSlides.map((_, index) => `<button type="button" data-home-slide="${index}" class="${index === state.homeSlideIndex ? 'active' : ''}" aria-label="${esc(t('Слайд'))} ${index + 1}" aria-pressed="${index === state.homeSlideIndex}"></button>`).join('')}</div></div></section>
+      <section class="home-menu"><div class="section-heading"><h2>${esc(t('Dishes of the Day'))}</h2><button class="text-button" data-go="menu">${esc(t('Все меню →'))}</button></div>
+      <div class="horizontal-dishes" id="home-dishes">${featured.length ? featured.map(dishTile).join('') : `<p class="muted">${esc(t('Меню скоро появится.'))}</p>`}</div></section>
+      <section class="promo-actions" aria-label="${esc(t('Заказ и бронирование'))}">
+        <button type="button" class="promo-action primary" data-go="booking"><strong>${esc(t('Забронировать столик'))} →</strong><span>${esc(t('Выберите стол, дату и время прямо в приложении.'))}</span></button>
+        <button type="button" class="promo-action" data-go="menu"><strong>${esc(t('Заказать на дом'))} →</strong><span>${esc(t('Выберите блюда и оформите быструю доставку.'))}</span></button>
+      </section>
+      <section class="two-gis-review" aria-label="${esc(t('Отзывы Stories в 2GIS'))}"><div class="row"><div class="two-gis-score"><strong>4,9</strong><span>★★★★★</span></div><a class="text-button" href="${twoGisReviewUrl}" data-2gis-link>${esc(t('Отзывы в 2GIS'))} →</a></div><p>«${esc(t('Очень вкусная кухня и официанты всегда рады нам.'))}» · Zhanełl Nurali, 29.10.2026</p><div class="two-gis-actions"><a class="primary" href="${twoGisReviewUrl}" data-2gis-link>${esc(t('Оставить отзыв'))}${icon('external')}</a><a href="${twoGisReviewUrl}" data-2gis-link>${esc(t('Все отзывы в 2GIS'))}${icon('external')}</a></div></section>
+      <section class="contact-section" aria-labelledby="contact-title">
+        <div class="section-heading"><h2 id="contact-title">${esc(t('Контакты'))}</h2></div>
+        <div class="contact-layout">
+          <div class="contact-details">
+            <a class="contact-row" href="${twoGisUrl}" data-2gis-link>
+              <span class="contact-copy"><small>${esc(t('Адрес'))}</small><strong>ул. Жибек Жолы, 66 · Алматы</strong></span>${icon('pin')}
+            </a>
+            <div class="contact-row"><span class="contact-copy"><small>${esc(t('Режим работы'))}</small><strong>${esc(t('Ежедневно'))}, 11:00–03:00</strong></span>${icon('clock')}</div>
+            <a class="contact-row" href="tel:+77020070049"><span class="contact-copy"><small>${esc(t('Телефон'))}</small><strong>+7 702 007 00 49</strong></span>${icon('contact')}</a>
+          </div>
+          <div class="contact-map">
+            ${contactMapPreview()}
+            <div class="contact-map-footer"><small>Stories · Алматы</small><a class="contact-map-link" href="${twoGisRouteUrl}" data-2gis-link>${esc(t('Маршрут в 2GIS'))}${icon('external')}</a></div>
+          </div>
+        </div>
+      </section>`;
+  }
+  function showHomeSlide(index) {
+    state.homeSlideIndex = (index + homeSlides.length) % homeSlides.length;
+    const image = document.querySelector('#home-slide-image');
+    if (image) {
+      image.classList.add('changing');
+      setTimeout(() => {
+        if (!image.isConnected) return;
+        image.onload = () => image.classList.remove('changing');
+        image.src = homeSlides[state.homeSlideIndex];
+        if (image.complete) image.classList.remove('changing');
+      }, 180);
+    }
+    document.querySelectorAll('[data-home-slide]').forEach(button => {
+      const active = Number(button.dataset.homeSlide) === state.homeSlideIndex;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+  }
+  function startHomeSlideShow() {
+    clearInterval(homeSlideTimer);
+    if (state.section !== 'home') return;
+    homeSlideTimer = setInterval(() => showHomeSlide(state.homeSlideIndex + 1), 5000);
+  }
+  function renderMenu() {
+    const categories = sortCategories([...new Set(state.menu.map(item => item.category))]);
+    const visibleCategories = state.category === 'all' ? categories : categories.filter(category => category === state.category);
+    return `<div class="menu-catalog-head"><h1 class="page-title">${esc(t('Меню'))}</h1><span class="catalog-total">${state.menu.length} ${esc(t('позиций'))}</span></div>
+      <div class="category-strip" role="tablist" aria-label="${esc(t('Категории меню'))}"><button class="category-chip ${state.category === 'all' ? 'active' : ''}" data-category="all">${esc(t('ВСЁ МЕНЮ'))}</button>${categories.map(category => `<button class="category-chip ${state.category === category ? 'active' : ''}" data-category="${esc(category)}" role="tab" aria-selected="${state.category === category}">${esc(categoryLabel(category))}</button>`).join('')}</div>
+      <div id="menu-list">${renderMenuList(visibleCategories)}</div>`;
+  }
+  function renderMenuList(categories, search = '') {
+    const query = search.trim().toLocaleLowerCase('ru-RU');
+    let priorityCount = 2;
+    return categories.map(category => {
+      const items = state.menu.filter(item => item.category === category && `${localizedItem(item, 'title')} ${localizedItem(item, 'description')}`.toLocaleLowerCase(state.language === 'kk' ? 'kk-KZ' : 'ru-RU').includes(query));
+      return items.length ? `<section class="menu-section"><h2 class="category-heading">${esc(categoryLabel(category))} <span class="category-count">${items.length}</span></h2><div class="product-list">${items.map(item => { const priority = priorityCount > 0; priorityCount -= 1; return productCard(item, priority); }).join('')}</div></section>` : '';
+    }).join('') || `<div class="empty-state muted">${esc(t('По вашему запросу ничего не найдено.'))}</div>`;
+  }
+  function renderCart() {
+    const entries = Object.entries(state.cart).filter(([, quantity]) => quantity > 0);
+    const total = entries.reduce((sum, [id, quantity]) => sum + (state.menu.find(item => item.id === Number(id))?.price || 0) * quantity, 0);
+    const activeBookings = state.bookings.filter(isActiveBooking);
+    if (state.orderType === 'dine_in' && !activeBookings.length) state.orderType = 'delivery';
+    return `<div class="page-top"><span class="eyebrow">${esc(t('Stories · Your selection'))}</span><h1 class="page-title">${esc(t('Ваша корзина'))}</h1></div>
+      ${entries.length ? `<div class="cart-list">${entries.map(([id, quantity]) => { const item = state.menu.find(row => row.id === Number(id)); if (!item) return ''; const title = localizedItem(item, 'title'); const source = imageFor(item); const placeholder = isPlaceholderImage(source); return `<article class="cart-item"><img class="${placeholder ? 'product-image-placeholder' : 'image-loading'}" src="${esc(source)}" alt="${esc(title)}" width="62" height="62" loading="lazy" decoding="async" onload="this.classList.remove('image-loading')" onerror="this.onerror=null;this.classList.remove('image-loading');this.src='/static/images/stories-logo-transparent.png';this.classList.add('product-image-placeholder')"><div><h3>${esc(title)}</h3>${quantityControl(id, quantity)}<div style="margin-top:5px"><strong>${money(item.price * quantity)}</strong></div></div><button class="remove-button" data-remove="${id}" aria-label="${esc(t('Удалить'))} ${esc(title)}">×</button></article>`; }).join('')}</div>
+        <div class="totals"><div><span>ПОДЫТОГ</span><strong>${money(total)}</strong></div><div class="grand-total"><span>ИТОГО</span><strong>${money(total)}</strong></div></div>
+        <form id="order-form" class="stack">
+          <div class="segmented"><button type="button" data-order-type="delivery" class="${state.orderType === 'delivery' ? 'active' : ''}">${esc(t('ДОСТАВКА'))}</button><button type="button" data-order-type="dine_in" class="${state.orderType === 'dine_in' ? 'active' : ''}" ${activeBookings.length ? '' : 'disabled'}>${esc(t('ПРЕДЗАКАЗ К БРОНИ'))}</button></div>
+          <select name="delivery_type" id="delivery-type" hidden><option value="dine_in" ${state.orderType === 'dine_in' ? 'selected' : ''}>${esc(t('Предзаказ к брони'))}</option><option value="delivery" ${state.orderType === 'delivery' ? 'selected' : ''}>${esc(t('Доставка'))}</option></select>
+          <label class="field" id="address-field" ${state.orderType === 'delivery' ? '' : 'hidden'}>${esc(t('Точный адрес доставки'))}<input name="address" maxlength="500" autocomplete="street-address" placeholder="Улица, дом, квартира" value="${esc(state.deliveryDetails.address)}" ${state.orderType === 'delivery' ? 'required' : ''}></label>
+          <label class="field" id="phone-field" ${state.orderType === 'delivery' ? '' : 'hidden'}>${esc(t('Контактный телефон'))}<input name="contact_phone" type="tel" maxlength="40" placeholder="+7 700 000 00 00" value="${esc(state.deliveryDetails.contact_phone)}" ${state.orderType === 'delivery' ? 'required' : ''}></label>
+          <section class="delivery-location" id="delivery-location" ${state.orderType === 'delivery' ? '' : 'hidden'}><span class="delivery-location-title">${esc(t('Координаты точки доставки'))}</span><div class="coordinate-fields"><label>${esc(t('Широта'))}<input name="latitude" type="number" min="-90" max="90" step="0.000001" placeholder="43.2389" value="${esc(state.deliveryDetails.latitude)}" ${state.orderType === 'delivery' ? 'required' : ''}></label><label>${esc(t('Долгота'))}<input name="longitude" type="number" min="-180" max="180" step="0.000001" placeholder="76.8897" value="${esc(state.deliveryDetails.longitude)}" ${state.orderType === 'delivery' ? 'required' : ''}></label></div><div class="location-actions"><button type="button" data-geolocate>${esc(t('Определить по GPS'))}</button><a id="delivery-map-link" hidden target="_blank" rel="noopener">${esc(t('Показать точку'))}</a><small id="location-status" class="location-status">${esc(t('Введите координаты или определите точку по GPS.'))}</small></div></section>
+          <label class="field" id="booking-field" ${state.orderType === 'dine_in' ? '' : 'hidden'}>${esc(t('Подтверждённая бронь'))}<select name="booking_id" ${state.orderType === 'dine_in' ? 'required' : ''}><option value="">${esc(t('Выберите активную бронь'))}</option>${activeBookings.map(b => `<option value="${b.id}">Стол №${b.table_number}, ${esc(b.booking_date)} ${esc(b.start_time)}</option>`).join('')}</select>${activeBookings.length ? '' : `<small class="muted">${esc(t('Для предзаказа нужна подтверждённая бронь.'))} <button type="button" class="text-button" data-go="booking">${esc(t('Забронировать столик'))}</button></small>`}</label>
+          <button class="primary-button" type="submit">${esc(t('Оформить заказ'))} &nbsp; →</button>
+        </form>` : `<div class="empty-state"><p class="muted">Корзина пока пуста. Выберите любимые блюда из меню.</p><button class="primary-button" data-go="menu">Перейти в меню</button></div>`}`;
+  }
+  function renderBooking() {
+    const today = new Date().toLocaleDateString('sv-SE');
+    if (!state.selectedTable && state.tables.length) state.selectedTable = state.tables[0].id;
+    return `<div class="page-top"><span class="eyebrow">Stories · Reserve your evening</span><h1 class="page-title">Бронирование столика</h1></div>
+      <form id="booking-form" class="stack">
+        <div class="floor-plan"><span class="floor-label">ВЫБЕРИТЕ СТОЛИК · ДОСТУПНЫЕ МЕСТА</span><div class="floor-zones"><div class="floor-zone">ГЛАВНЫЙ ЗАЛ</div><div class="floor-zone vip">VIP КАБИНЫ</div></div><div class="floor-label">БАРНАЯ СТОЙКА</div><div class="table-grid">${state.tables.map(table => `<button type="button" class="table-seat ${state.selectedTable === table.id ? 'selected' : ''}" data-table="${table.id}" aria-pressed="${state.selectedTable === table.id}"><span>№ ${table.table_number}</span><small>${table.seats_count} ${esc(t('мест'))}</small></button>`).join('') || `<span class="muted">${esc(t('Столики пока не добавлены.'))}</span>`}</div></div>
+        <input type="hidden" name="table_id" id="selected-table" value="${state.selectedTable || ''}">
+        <div class="field-row"><label class="field">Дата<input type="date" name="booking_date" min="${today}" value="${today}" required></label><label class="field">Время<input type="time" name="start_time" value="19:00" required></label></div>
+        <label class="field">До<input type="time" name="end_time" value="21:00" required></label>
+        <label class="field">Специальные пожелания<textarea name="special_requests" maxlength="1000" placeholder="Например, столик у окна"></textarea></label>
+        <button class="primary-button" type="submit">Забронировать</button>
+      </form>
+      <div class="section-heading"><h2>Мои брони</h2></div><div class="booking-list">${state.bookings.map(b => `<article class="booking-row"><div class="row"><strong>Стол №${b.table_number}</strong><span class="badge">${esc(b.status)}</span></div><p>${esc(b.booking_date)} · ${esc(b.start_time)}–${esc(b.end_time)}${b.special_requests ? ` · ${esc(b.special_requests)}` : ''}</p></article>`).join('') || '<p class="muted">Броней пока нет.</p>'}</div>`;
+  }
+  function renderProfile() {
+    const upcomingBookings = state.bookings.filter(booking => booking.status !== 'cancelled' && isUpcomingBooking(booking));
+    const orderHistory = state.orders.map(order => `<article class="booking-row"><div class="row"><strong>${esc(t('Заказ №'))}${order.id}</strong><span class="badge">${esc(order.status)}</span></div><p>${new Date(order.created_at).toLocaleString(state.language === 'kk' ? 'kk-KZ' : 'ru-RU')} · ${order.delivery_type === 'delivery' ? esc(t('Доставка')) : esc(t('Предзаказ к брони'))}</p><p>${order.items.map(line => `${esc(line.title)} × ${line.quantity}`).join(', ')}</p><strong>${money(order.total_price)}</strong></article>`).join('');
+    return `<div class="page-top"><span class="eyebrow">Stories · Welcome back</span><h1 class="page-title">${esc(t('Ваш профиль'))}</h1></div><div class="surface"><div class="review-head"><div class="avatar">${esc((state.user?.name || 'S').slice(0, 1).toLocaleUpperCase('ru-RU'))}</div><div><strong>${esc(state.user?.name || 'Гость Stories')}</strong><small>${state.user?.username ? `@${esc(state.user.username)}` : 'Гость Stories'}</small></div></div></div><div class="section-heading"><h2>${esc(t('Ваш визит'))}</h2></div><button class="primary-button" data-go="booking">${esc(t('Забронировать столик'))}</button><div class="section-heading"><h2>${esc(t('История заказов'))}</h2></div><div class="booking-list">${orderHistory || `<p class="muted">${esc(t('Заказов пока нет.'))}</p>`}</div><div class="section-heading"><h2>${esc(t('Предстоящие брони'))}</h2></div><div class="booking-list">${upcomingBookings.map(b => `<article class="booking-row"><div class="row"><strong>Стол №${b.table_number}</strong><span class="badge">${esc(b.status)}</span></div><p>${esc(b.booking_date)} · ${esc(b.start_time)}–${esc(b.end_time)}</p></article>`).join('') || `<p class="muted">${esc(t('У вас пока нет броней.'))}</p>`}</div>`;
+  }
+  function renderAdmin() {
+    return `<div class="actions"><button data-admin-tab="bookings" class="${state.adminTab === 'bookings' ? 'active' : ''}">Брони</button><button data-admin-tab="orders" class="${state.adminTab === 'orders' ? 'active' : ''}">Заказы</button><button data-admin-tab="menu" class="${state.adminTab === 'menu' ? 'active' : ''}">Меню</button></div><section id="admin-content"><p>Загрузка…</p></section>`;
+  }
+  function render() {
+    renderNav();
+    applyPreferences();
+    const views = {
+      home: renderHome(),
+      menu: renderMenu(),
+      offers: `<div class="page-top"><span class="eyebrow">Stories · Special moments</span><h1 class="page-title">Предложения</h1></div>${state.offers.map(offer => `<article class="offer-card"><h3>${esc(offer.title)}</h3><p>${esc(offer.description)}</p></article>`).join('')}`,
+      booking: renderBooking(),
+      cart: renderCart(),
+      reviews: `<div class="page-top"><span class="eyebrow">Stories · 2GIS</span><h1 class="page-title">Отзывы гостей</h1></div>
+        <section class="two-gis-review"><div class="two-gis-score"><strong>4,9</strong><span>★★★★★</span></div><p>${esc(t('По данным карточки Stories в 2GIS: 4,9 на основе 4 671 оценки. Проверено 7 ноября 2026 года; актуальные отзывы открываются в 2GIS.'))}</p><div class="two-gis-actions"><a class="primary" href="${twoGisReviewUrl}" data-2gis-link>${esc(t('Читать отзывы'))}${icon('external')}</a><a href="${twoGisReviewUrl}" data-2gis-link>${esc(t('Оставить отзыв'))}${icon('external')}</a></div></section>
+        <article class="review-card"><span class="eyebrow">${esc(t('Отзыв 2GIS · 29 октября 2026'))}</span><p class="review-text">«${esc(t('Очень вкусная кухня и официанты всегда рады нам.'))}»</p><p class="muted">Zhanełl Nurali · 2GIS</p><a class="text-button" href="${twoGisReviewUrl}" data-2gis-link>${esc(t('Все отзывы в 2GIS'))} →</a></article>
+        <article class="review-card" style="margin-top:10px"><span class="eyebrow">${esc(t('Отзыв 2GIS · 6 октября 2026'))}</span><p class="review-text">«${esc(t('Все хорошо, но только нарды на новые думаю нужно поменять.'))}»</p><p class="muted">Jin XiaoLong · 2GIS</p><a class="text-button" href="${twoGisReviewUrl}" data-2gis-link>${esc(t('Все отзывы в 2GIS'))} →</a></article>`,
+      profile: renderProfile(),
+      info: `<div class="page-top"><span class="eyebrow">Stories · Since 2018</span><h1 class="page-title">Хорошие вечера остаются с вами</h1></div><article class="hero-banner" style="min-height:180px"><div class="hero-copy"><span class="eyebrow">Lounge · Kitchen · Bar</span><h1>Stories</h1><p>ОТКРЫТЫ КАЖДЫЙ ДЕНЬ</p></div></article><div class="section-heading"><h2>Контакты</h2></div><article class="offer-card"><h3>Stories Lounge Bar</h3><p>Режим работы и точный адрес уточните у заведения. Мы будем рады помочь с бронированием и выбором стола.</p></article><button class="primary-button" data-go="booking">Забронировать столик</button>`,
+      questions: `<div class="page-top"><span class="eyebrow">Stories · Good to know</span><h1 class="page-title">Частые вопросы</h1></div>${[['Как забронировать столик?', 'Выберите дату, время и стол на схеме зала. Бронь появится в вашем профиле после отправки.'], ['Можно ли заказать к столику?', 'Да. Добавьте блюда в корзину и выберите «Заказ к столу».'], ['Как оформить доставку?', 'Добавьте позиции в корзину, выберите «Доставка» и укажите адрес.'], ['Можно прийти с компанией?', 'Выберите стол с подходящим количеством мест или свяжитесь с заведением.']].map(([q, a]) => `<article class="offer-card"><h3>${q}</h3><p>${a}</p></article>`).join('')}`,
+      photos: `<div class="page-top"><span class="eyebrow">Stories · Moments</span><h1 class="page-title">Фото</h1></div><div class="horizontal-dishes" style="margin-inline:0;padding-inline:0;grid-auto-columns:minmax(0,1fr);grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row">${state.menu.slice(0, 8).map(item => `<img class="image-loading" src="${esc(imageFor(item))}" alt="${esc(localizedItem(item, 'title'))}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:13px" loading="lazy" decoding="async" onload="this.classList.remove('image-loading')" onerror="this.onerror=null;this.classList.remove('image-loading');this.src='/static/images/stories-mark.svg';this.classList.add('product-image-placeholder')">`).join('')}</div>`,
+      admin: renderAdmin()
+    };
+    app.innerHTML = views[state.section] || views.menu;
+    overlayRoot.innerHTML = renderProductDetail();
+    document.body.classList.toggle('product-open', state.selectedProduct !== null);
+    app.classList.remove('view-enter');
+    void app.offsetWidth;
+    app.classList.add('view-enter');
+    localizeDom(app);
+    localizeDom(nav);
+    updateDeliveryMapLink();
+    if (state.section === 'admin') loadAdmin();
+    startHomeSlideShow();
+  }
+  async function refreshBookings() { state.bookings = await api('/api/bookings/mine'); }
+  function isUpcomingBooking(booking) {
+    const today = new Date().toLocaleDateString('sv-SE');
+    return booking.booking_date > today || (booking.booking_date === today && booking.end_time > new Date().toTimeString().slice(0, 5));
+  }
+  function isActiveBooking(booking) {
+    return booking.status === 'confirmed' && isUpcomingBooking(booking);
+  }
+  function readForm(form) { return Object.fromEntries(new FormData(form).entries()); }
+  function updateDeliveryMapLink() {
+    const latitudeValue = document.querySelector('[name="latitude"]')?.value.trim();
+    const longitudeValue = document.querySelector('[name="longitude"]')?.value.trim();
+    const link = document.querySelector('#delivery-map-link');
+    if (!link) return;
+    const status = document.querySelector('#location-status');
+    if (!latitudeValue || !longitudeValue) {
+      link.hidden = true;
+      if (status) status.textContent = t('Введите координаты или определите точку по GPS.');
+      return;
+    }
+    const latitude = Number(latitudeValue);
+    const longitude = Number(longitudeValue);
+    if (!Number.isFinite(latitude) || Math.abs(latitude) > 90 || !Number.isFinite(longitude) || Math.abs(longitude) > 180) {
+      link.hidden = true;
+      if (status) status.textContent = t('Проверьте координаты доставки.');
+      return;
+    }
+    link.href = `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=17/${latitude}/${longitude}`;
+    link.hidden = false;
+    if (status) status.textContent = t('Координаты точки доставки указаны.');
+  }
+  async function loadAdmin() {
+    const target = document.querySelector('#admin-content');
+    try {
+      if (state.adminTab === 'bookings') {
+        const filter = new URLSearchParams();
+        const dateValue = document.querySelector('#admin-date')?.value;
+        const statusValue = document.querySelector('#admin-status')?.value;
+        if (dateValue) filter.set('booking_date', dateValue);
+        if (statusValue) filter.set('status_filter', statusValue);
+        const rows = await api(`/api/admin/bookings?${filter}`);
+        target.innerHTML = `<div class="row"><label>Дата <input id="admin-date" type="date"></label><label>Статус <select id="admin-status"><option value="">Все</option><option>pending</option><option>confirmed</option><option>cancelled</option></select></label></div>${rows.map(b => `<article class="item"><div class="row"><strong>Стол №${b.table_number} · ${esc(b.booking_date)} ${esc(b.start_time)}–${esc(b.end_time)}</strong><span class="badge">${esc(b.status)}</span></div><p>${esc(b.user_name)} ${b.username ? `(@${esc(b.username)})` : ''}</p><div class="actions">${b.status === 'pending' ? `<button data-booking-status="confirmed" data-id="${b.id}">Подтвердить</button>` : ''}${b.status !== 'cancelled' ? `<button class="danger" data-booking-status="cancelled" data-id="${b.id}">Отменить</button>` : ''}</div></article>`).join('') || '<p>Бронирований нет.</p>'}`;
+        target.querySelector('#admin-date').value = dateValue || '';
+        target.querySelector('#admin-status').value = statusValue || '';
+        target.querySelectorAll('input,select').forEach(el => el.addEventListener('change', loadAdmin));
+      } else if (state.adminTab === 'orders') {
+        const rows = await api('/api/admin/orders');
+        target.innerHTML = rows.map(order => `<article class="item"><div class="row"><strong>Заказ №${order.id}</strong><span class="badge">${esc(order.status)}</span></div><p>${esc(order.user_name)} · ${order.delivery_type === 'delivery' ? `Доставка: ${esc(order.address)} · ${esc(order.contact_phone || '')} · Координаты: ${esc(order.latitude)}, ${esc(order.longitude)} <a href="https://www.openstreetmap.org/?mlat=${encodeURIComponent(order.latitude)}&mlon=${encodeURIComponent(order.longitude)}#map=17/${encodeURIComponent(order.latitude)}/${encodeURIComponent(order.longitude)}" target="_blank" rel="noopener">Карта</a>` : order.booking ? `Предзаказ к брони №${order.booking_id}: стол №${order.booking.table_number}, ${esc(order.booking.booking_date)} ${esc(order.booking.start_time)}` : 'В заведении без брони'}</p><p>${order.items.map(line => `${esc(line.title)} × ${line.quantity}`).join(', ')}</p><strong>${money(order.total_price)}</strong></article>`).join('') || '<p>Заказов пока нет.</p>';
+      } else {
+        target.innerHTML = `<form id="menu-add-form" class="stack"><label>Название<input name="title" required maxlength="160"></label><label>Категория<input name="category" required maxlength="80" placeholder="Напитки"></label><label>Цена<input name="price" type="number" min="0.01" step="0.01" required></label><label>Описание<input name="description" maxlength="2000"></label><button class="primary">Добавить позицию</button></form><h3>Текущие позиции</h3>${state.menu.map(item => `<article class="item row"><div><strong>${esc(localizedItem(item, 'title'))}</strong><p>${esc(categoryLabel(item.category))} · ${money(item.price)}</p></div><button class="danger" data-delete-menu="${item.id}">Удалить</button></article>`).join('')}`;
+      }
+      localizeDom(target);
+    } catch (error) { target.innerHTML = `<div class="notice error">${esc(error.message)}</div>`; localizeDom(target); }
+  }
+
+  document.querySelector('.topbar').addEventListener('click', event => {
+    const languageButton = event.target.closest('[data-language]');
+    const go = event.target.closest('[data-go]');
+    if (languageButton) {
+      state.language = languageButton.dataset.language;
+      try { localStorage.setItem('stories-language', state.language); } catch (_) {}
+      render();
+    }
+    if (event.target.closest('#theme-toggle')) {
+      switchThemeFromControl(event.target.closest('#theme-toggle'));
+    }
+    if (go) {
+      event.preventDefault();
+      state.section = go.dataset.go;
+      render();
+    }
+  });
+  nav.addEventListener('click', event => {
+    const button = event.target.closest('[data-nav]');
+    if (!button) return;
+    state.section = button.dataset.nav;
+    render();
+  });
+  app.addEventListener('click', async event => {
+    const mapLink = event.target.closest('[data-2gis-link]');
+    if (mapLink) {
+      event.preventDefault();
+      if (tg?.openLink) tg.openLink(mapLink.href);
+      else window.open(mapLink.href, '_blank', 'noopener');
+      return;
+    }
+    const add = event.target.closest('[data-add]');
+    const quantity = event.target.closest('[data-quantity]');
+    const product = event.target.closest('[data-product]');
+    const adminTab = event.target.closest('[data-admin-tab]');
+    const bookingStatus = event.target.closest('[data-booking-status]');
+    const deleteItem = event.target.closest('[data-delete-menu]');
+    const go = event.target.closest('[data-go]');
+    const category = event.target.closest('[data-category]');
+    const table = event.target.closest('[data-table]');
+    const remove = event.target.closest('[data-remove]');
+    const orderType = event.target.closest('[data-order-type]');
+    const geolocate = event.target.closest('[data-geolocate]');
+    const homeSlide = event.target.closest('[data-home-slide]');
+    const action = event.target.closest('[data-action]');
+    try {
+      if (homeSlide) { showHomeSlide(Number(homeSlide.dataset.homeSlide)); return; }
+      if (geolocate) {
+        const status = document.querySelector('#location-status');
+        if (!navigator.geolocation) { if (status) status.textContent = t('Геолокация недоступна в этом браузере.'); return; }
+        geolocate.disabled = true;
+        if (status) status.textContent = t('Определяем местоположение…');
+        navigator.geolocation.getCurrentPosition(position => {
+          state.deliveryDetails.latitude = position.coords.latitude.toFixed(6);
+          state.deliveryDetails.longitude = position.coords.longitude.toFixed(6);
+          document.querySelector('[name="latitude"]').value = state.deliveryDetails.latitude;
+          document.querySelector('[name="longitude"]').value = state.deliveryDetails.longitude;
+          geolocate.disabled = false;
+          updateDeliveryMapLink();
+        }, () => {
+          geolocate.disabled = false;
+          if (status) status.textContent = t('Не удалось определить точку. Введите координаты вручную.');
+        }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 });
+        return;
+      }
+      if (add) { state.cart[add.dataset.add] = (state.cart[add.dataset.add] || 0) + 1; render(); return; }
+      if (quantity) { const id = quantity.dataset.quantity; state.cart[id] = Math.max(0, (state.cart[id] || 0) + Number(quantity.dataset.delta)); render(); return; }
+      if (product && !event.target.closest('button')) { state.selectedProduct = Number(product.dataset.product); state.detailQuantity = 1; render(); return; }
+      if (remove) { state.cart[remove.dataset.remove] = 0; render(); }
+      if (go) { state.section = go.dataset.go; render(); }
+      if (category) { state.category = category.dataset.category; render(); }
+      if (table) {
+        state.selectedTable = Number(table.dataset.table);
+        document.querySelector('#selected-table').value = state.selectedTable;
+        document.querySelectorAll('[data-table]').forEach(button => {
+          const selected = Number(button.dataset.table) === state.selectedTable;
+          button.classList.toggle('selected', selected);
+          button.setAttribute('aria-pressed', String(selected));
+        });
+      }
+      if (orderType) {
+        if (orderType.disabled) return;
+        state.orderType = orderType.dataset.orderType;
+        const select = document.querySelector('#delivery-type');
+        select.value = orderType.dataset.orderType;
+        document.querySelectorAll('[data-order-type]').forEach(button => button.classList.toggle('active', button === orderType));
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      if (action?.dataset.action === 'route') {
+        const url = 'https://maps.google.com/?q=Stories+Lounge+Bar';
+        if (tg?.openLink) tg.openLink(url); else window.open(url, '_blank', 'noopener');
+      }
+      if (adminTab) { state.adminTab = adminTab.dataset.adminTab; render(); }
+      if (bookingStatus) { await api(`/api/admin/bookings/${bookingStatus.dataset.id}`, {method:'PATCH', body:JSON.stringify({status:bookingStatus.dataset.bookingStatus})}); toast('Статус брони обновлён'); await loadAdmin(); }
+      if (deleteItem) { await api(`/api/admin/menu/${deleteItem.dataset.deleteMenu}`, {method:'DELETE'}); await loadData(); toast('Позиция удалена'); render(); }
+    } catch (error) { toast(error.message, true); }
+  });
+  overlayRoot.addEventListener('click', event => {
+    const closeProduct = event.target.closest('[data-close-product]');
+    const detailQuantity = event.target.closest('[data-detail-quantity]');
+    const detailAdd = event.target.closest('[data-detail-add]');
+    if (closeProduct) {
+      if (event.target === closeProduct || closeProduct.matches('button')) { state.selectedProduct = null; render(); }
+      return;
+    }
+    if (detailQuantity) { state.detailQuantity = Math.max(1, state.detailQuantity + Number(detailQuantity.dataset.detailQuantity)); render(); return; }
+    if (detailAdd) { const id = detailAdd.dataset.detailAdd; state.cart[id] = (state.cart[id] || 0) + state.detailQuantity; state.selectedProduct = null; state.detailQuantity = 1; render(); }
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && state.selectedProduct !== null) { state.selectedProduct = null; render(); return; }
+    if (!app.contains(event.target)) return;
+    const product = event.target.closest('[data-product]');
+    if (product && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); state.selectedProduct = Number(product.dataset.product); state.detailQuantity = 1; render(); }
+  });
+  app.addEventListener('input', event => {
+    if (Object.hasOwn(state.deliveryDetails, event.target.name)) state.deliveryDetails[event.target.name] = event.target.value;
+    if (event.target.name === 'latitude' || event.target.name === 'longitude') updateDeliveryMapLink();
+  });
+  app.addEventListener('change', event => {
+    if (event.target.id === 'delivery-type') {
+      const delivery = event.target.value === 'delivery';
+      document.querySelector('#address-field').hidden = !delivery;
+      document.querySelector('#phone-field').hidden = !delivery;
+      document.querySelector('#delivery-location').hidden = !delivery;
+      document.querySelector('#booking-field').hidden = delivery;
+      document.querySelector('[name="address"]').required = delivery;
+      document.querySelector('[name="contact_phone"]').required = delivery;
+      document.querySelector('[name="latitude"]').required = delivery;
+      document.querySelector('[name="longitude"]').required = delivery;
+      document.querySelector('[name="booking_id"]').required = !delivery;
+    }
+  });
+  app.addEventListener('submit', async event => {
+    event.preventDefault();
+    try {
+      const form = event.target;
+      const values = readForm(form);
+      if (form.id === 'booking-form') {
+        if (!values.table_id) throw new Error('Выберите столик на схеме зала');
+        const result = await api('/api/bookings', {method:'POST', body:JSON.stringify({...values, table_id:Number(values.table_id)})});
+        toast(result.message); await refreshBookings(); render();
+      } else if (form.id === 'order-form') {
+        const lines = Object.entries(state.cart).filter(([, quantity]) => quantity > 0).map(([menu_item_id, quantity]) => ({menu_item_id:Number(menu_item_id), quantity}));
+        const result = await api('/api/orders', {method:'POST', body:JSON.stringify({delivery_type:values.delivery_type, address:values.address || null, contact_phone:values.contact_phone || null, latitude:values.latitude ? Number(values.latitude) : null, longitude:values.longitude ? Number(values.longitude) : null, booking_id:values.booking_id ? Number(values.booking_id) : null, items:lines})});
+        state.cart = {}; state.deliveryDetails = { address: '', contact_phone: '', latitude: '', longitude: '' }; await loadData(); toast(`${t('Заказ №')}${result.id} ${t('принят на сумму')} ${money(result.total_price)}`); render();
+      } else if (form.id === 'review-form') {
+        await api('/api/reviews', {method:'POST', body:JSON.stringify({rating:Number(values.rating), text:values.text})});
+        form.reset(); toast('Спасибо за отзыв!');
+      } else if (form.id === 'menu-add-form') {
+        await api('/api/admin/menu', {method:'POST', body:JSON.stringify({...values, price:Number(values.price)})});
+        await loadData(); toast('Позиция добавлена'); render();
+      }
+    } catch (error) { toast(error.message, true); }
+  });
+  async function loadData() {
+    [state.menu, state.tables, state.offers, state.orders] = await Promise.all([api('/api/menu'), api('/api/tables'), api('/api/offers'), api('/api/orders/mine')]);
+    await refreshBookings();
+  }
+  async function boot() {
+    try {
+      try {
+        const localeResponse = await fetch('/static/i18n.json', { cache: 'no-cache' });
+        if (localeResponse.ok) state.translations = await localeResponse.json();
+      } catch (_) {}
+      try {
+        const savedLanguage = localStorage.getItem('stories-language');
+        const savedTheme = localStorage.getItem('stories-theme');
+        if (savedLanguage === 'ru' || savedLanguage === 'kk') state.language = savedLanguage;
+        if (savedTheme === 'light' || savedTheme === 'dark') state.theme = savedTheme;
+      } catch (_) {}
+      applyPreferences();
+      if (!initData && !devMode) {
+        app.innerHTML = `<div class="notice error">${esc(t('Откройте приложение через Telegram. Для локального теста добавьте'))} <code>?demo=1</code> (${esc(t('сервер должен быть запущен с DEV_MODE=true'))}).</div>`;
+        return;
+      }
+      state.user = await api('/api/me');
+      document.querySelector('#user-label').textContent = state.user.role === 'admin' ? 'Администратор' : state.user.name;
+      await loadData(); render();
+    } catch (error) { app.innerHTML = `<div class="notice error">${esc(error.message)}</div>`; }
+  }
+  boot();
+})();
+</script>
+</body>
+</html>

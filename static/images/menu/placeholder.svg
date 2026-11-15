@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="Stories menu image placeholder">
+  <rect width="640" height="480" fill="#172326"/>
+  <circle cx="320" cy="230" r="142" fill="#202f31" stroke="#b6a36f" stroke-width="3"/>
+  <circle cx="320" cy="230" r="116" fill="none" stroke="#607270" stroke-width="2"/>
+  <path d="M214 250h212M244 250c8 54 37 81 76 81s68-27 76-81M270 216c13-23 30-34 50-34s37 11 50 34" fill="none" stroke="#d5c28c" stroke-linecap="round" stroke-width="7"/>
+  <circle cx="320" cy="177" r="8" fill="#d5c28c"/>
+  <text x="320" y="414" fill="#d9e0db" font-family="Georgia,serif" font-size="34" text-anchor="middle">Stories</text>
+</svg>
